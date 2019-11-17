@@ -52,6 +52,7 @@
     <Compile Include="Commande.cs" />
     <Compile Include="Entrepot.cs" />
     <Compile Include="Fournisseur.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

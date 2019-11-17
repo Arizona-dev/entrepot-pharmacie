@@ -7,13 +7,19 @@ namespace entrepot_pharmacie
 {
     public class Article
     {
-        private int nom;
-        private int reference;
-        private int description;
-        private int prix_achat;
-        private int code_fournisseur;
-        private int marge_benef;
-        private int quantite_stock;
+        public string nom;
+        public string reference;
+        public string description;
+        public double prix_achat;
+        public int code_fournisseur;
+        public double marge_benef;
+        public int quantite_stock;
+
+
+
+
+
+
 
         public Fournisseur Fournisseur
         {

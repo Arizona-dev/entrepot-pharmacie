@@ -8,14 +8,9 @@ namespace entrepot_pharmacie
     public class Entrepot
     {
         Caisse caisse;
-        public static void Main()
-        {
+        Article article;
 
-            Caisse caisse = new Caisse();
-            caisse.ajouter_argent(1000);
-            Console.WriteLine(caisse.somme);
-
-        }
+        public List<Article> listArticle = new List<Article>();
 
         public Fournisseur listeFournisseur
         {
@@ -56,9 +51,19 @@ namespace entrepot_pharmacie
             throw new System.NotImplementedException();
         }
 
-        public void creer_article()
+        public void creer_article(string nom, string reference, string description, double prix_a, int code, double marge, int quantite)
         {
-            throw new System.NotImplementedException();
+            Article article = new Article();
+
+            article.nom = nom;
+            article.reference = reference;
+            article.description = description;
+            article.prix_achat = prix_a;
+            article.code_fournisseur = code;
+            article.marge_benef = marge;
+            article.quantite_stock = quantite;
+            listArticle.Add(article);
+
         }
 
         public void modifier_article()
