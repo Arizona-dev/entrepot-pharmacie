@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="entrepot_pharmacie.Entrepot">
-    <Position X="5.5" Y="4.5" Width="1.5" />
+    <Position X="5.5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAQAAIIAAAAAAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <HashCode>AAAAAAAAQAAIIIAAAAAEAAAAAAAAAAAABAAAAAA0AAA=</HashCode>
       <FileName>Entrepot.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -15,14 +15,14 @@
   <Class Name="entrepot_pharmacie.Caisse">
     <Position X="1.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAAA=</HashCode>
       <FileName>Caisse.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="entrepot_pharmacie.Fournisseur">
     <Position X="9.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAIAAAIAAAAABAAAAAAAAAAAA=</HashCode>
       <FileName>Fournisseur.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -52,7 +52,7 @@
   <Class Name="entrepot_pharmacie.Article">
     <Position X="5.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <HashCode>AAAAAAAAAAAAgAAAIAAEIEIAAAAAAAAAAAAQAAAAAQA=</HashCode>
       <FileName>Article.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

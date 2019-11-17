@@ -7,12 +7,18 @@ namespace entrepot_pharmacie
 {
     public class Caisse
     {
-        public int somme
+        public int somme = 1000;
+        public string nom;
+        Entrepot entrepot;
+
+        public void ajouter_argent(int somme)
         {
-            get => default;
-            set
-            {
-            }
+            this.somme = this.somme + somme;
+        }
+
+        public void retirer_argent()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
