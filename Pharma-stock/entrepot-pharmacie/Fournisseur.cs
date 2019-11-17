@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace entrepot_pharmacie
 {
-    class Program
+    public class Fournisseur
     {
-        static void Main(string[] args)
+        public Article listeArticle
         {
-
-
-
-
-
-
+            get => default;
+            set
+            {
+            }
         }
     }
 }
