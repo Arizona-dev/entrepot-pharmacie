@@ -8,9 +8,9 @@ namespace entrepot_pharmacie
     public class Entrepot
     {
         Caisse caisse;
-        public Article article;
-
-        //public List<Article> listArticle = new List<Article>();
+        
+        Article article;
+        public List<Entrepot> listStock;
 
         public Fournisseur listeFournisseur
         {
@@ -55,7 +55,7 @@ namespace entrepot_pharmacie
 
         public void achat_article()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void vente_article()

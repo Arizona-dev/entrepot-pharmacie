@@ -7,6 +7,13 @@ namespace entrepot_pharmacie
 {
     public class Client
     {
+        private string nom;
+        private string prenom;
+        private string adresse;
+        private int telephone;
+        private string email;
+        private int date_naissance;
+
         public Commande listeCommande
         {
             get => default;

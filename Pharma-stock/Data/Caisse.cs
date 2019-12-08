@@ -11,14 +11,14 @@ namespace entrepot_pharmacie
         public string nom;
         Entrepot entrepot;
 
-        public void ajouter_argent(int somme)
+        public void ajouter_argent(int a)
         {
-            this.somme = this.somme + somme;
+            somme = somme + a;
         }
 
-        public void retirer_argent()
+        public void retirer_argent(int a)
         {
-            throw new System.NotImplementedException();
+            somme = somme - a;
         }
     }
 }

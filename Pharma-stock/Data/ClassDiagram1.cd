@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="entrepot_pharmacie.Article">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAIAAEIEIAAAAAAACABAAQAAAQAQA=</HashCode>
+      <FileName>Article.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Fournisseur" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="entrepot_pharmacie.Caisse">
+    <Position X="1.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAIEAAAAAAAACAQAAAAAAAAAA=</HashCode>
+      <FileName>Caisse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="entrepot_pharmacie.Client">
+    <Position X="9.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAgCAAAIAAAAAAAIADAAAAAAACAAAA=</HashCode>
+      <FileName>Client.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="entrepot_pharmacie.Entrepot">
+    <Position X="5.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAQAAIIIABAAAAAAAAAAAAABAAAAAAAAA0AAA=</HashCode>
+      <FileName>Entrepot.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="listeFournisseur" />
+      <Property Name="listeClient" />
+      <Property Name="nomCaisse" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="entrepot_pharmacie.Fournisseur">
+    <Position X="9.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAIAAAIAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Fournisseur.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="listeArticle" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="entrepot_pharmacie.Commande">
+    <Position X="1.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIAAAAIAAgAAAAAAAIAAAAAAQAAAAAQAAAAABAAAAAA=</HashCode>
+      <FileName>Commande.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="listeArticle" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
