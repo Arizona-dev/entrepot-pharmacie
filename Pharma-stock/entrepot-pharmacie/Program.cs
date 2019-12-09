@@ -10,7 +10,6 @@ namespace entrepot_pharmacie
     {
         static void Main(string[] args)
         {
-
             Caisse caisse = new Caisse();
             Entrepot entrepot = new Entrepot();
             Article article;
@@ -26,14 +25,19 @@ namespace entrepot_pharmacie
 
             Console.WriteLine("0) Quitter\n1) Voir solde\n2) Ajouter un produit\n3) Voir les produits disponibles\n4) Acheter un produit\n");
             int result = 0;
-            int resc = 0;
-            int resq = 0;
-            Double resp = 0;
-            Double resm = 0;
+            String name = "";
+            String reference = "";
+            String description = "";
+            Decimal prixHT = 0;
+            int code = 0;
+            Decimal marge = 0;
+            int quantiteDispo = 0;
+            Boolean estValide = false;
+
             
 
+
             String choice = Console.ReadLine();
-            
             try
             {
                 result = Int32.Parse(choice);
@@ -48,75 +52,44 @@ namespace entrepot_pharmacie
                 if (result == 1)
                 {
                     Console.Clear();
-                    Console.WriteLine(caisse.somme + "\n");
+                    Console.WriteLine(caisse.soldeCaisse + "\n");
                     result = 9;
-                    
                 }
                 else if (result == 2)
                 {
                     Console.Clear();
                     Console.WriteLine("Remplir les informations du nouveau produit : ");
                     Console.WriteLine("Nom du produit : ");
-                    String name = Console.ReadLine();
+                    name = Console.ReadLine();
 
                     Console.WriteLine("Numero de référence du produit : ");
-                    String reference = Console.ReadLine();
+                    reference = Console.ReadLine();
 
                     Console.WriteLine("Description du produit : ");
-                    String description = Console.ReadLine();
+                    description = Console.ReadLine();
 
                     Console.WriteLine("Prix HT du produit : ");
-                    String prix = Console.ReadLine();
-                    try
-                    {
-                        resp = Convert.ToDouble(prix);
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine($"Format incorrect '{prix}'");
-                        prix = Console.ReadLine();
-                    }
+                    string prixIn = Console.ReadLine();
+                    prixHT = Utilitaire.TestValeur(prixIn, false).Item2;
 
                     Console.WriteLine("Code fournisseur du produit : ");
-                    String code = Console.ReadLine();
-                    try
-                    {
-                        resc = Int32.Parse(code);
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine($"Format incorrect '{code}'");
-                        code = Console.ReadLine();
-                    }
+                    string codeIn = Console.ReadLine();
+                    code = Utilitaire.TestValeur(codeIn, true).Item1;
 
                     Console.WriteLine("Marge du produit : ");
-                    String marge = Console.ReadLine();
-                    try
-                    {
-                        resm = Convert.ToDouble(marge);
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine($"Format incorrect '{marge}'");
-                        marge = Console.ReadLine();
-                    }
+                    String margeIn = Console.ReadLine();
+                    marge = Utilitaire.TestValeur(margeIn, false).Item2;
 
                     Console.WriteLine("Quantité disponible du produit : ");
-                    String quantity = Console.ReadLine();
-                    try
-                    {
-                        resq = Int32.Parse(quantity);
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine($"Format incorrect" +
-                            $"23 '{quantity}'");
-                        quantity = Console.ReadLine();
-                    }
+                    String quantityIn = Console.ReadLine();
+                    quantiteDispo = Utilitaire.TestValeur(quantityIn, true).Item1;
 
-
-                    article = new Article(name, reference, description, resp, resc, resm, resq);
+                    article = new Article(name, reference, description, prixHT, code, marge, quantiteDispo);
                     listArticle.Add(article);
+
+                    Console.WriteLine(reference + ", " + name + ", " + description + ", " + prixHT + ", " + code + ", " + marge + ", " + prixHT + marge + "\n");
+                    database.Insert(reference, name, description, prixHT, code, marge, quantiteDispo);
+
                     result = 9;
                     Console.Clear();
                     printInventory(listArticle);
@@ -167,9 +140,9 @@ namespace entrepot_pharmacie
                     
                 } else if (result == 5)
                 {
-                    Console.WriteLine("Test de la bdd\n");
-
-                    database.Insert();
+                    Console.Clear();
+                    
+                    
                 }
 
                     Console.WriteLine("0) Quitter\n1) Voir solde\n2) Ajouter un produit\n3) Voir les produits disponibles\n4) Acheter un produit\n");

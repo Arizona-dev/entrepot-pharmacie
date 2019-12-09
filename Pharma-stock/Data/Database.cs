@@ -74,22 +74,29 @@ namespace Data
         }
 
         //Insert statement
-        public void Insert()
+        public void Insert(string reference, string nom, string description, Decimal prix_achat, Int32 code, Decimal marge, Decimal prix_revente)
         {
-            //string query = "INSERT INTO tableinfo (name, age) VALUES('John Smith', '33')";
-            string query = "INSERT INTO `articles` (`reference`, `nom`, `description`, `prix_achat`, `code_fournisseur`, `marge_benef`, `prix_revente`) VALUES('1', 'bague', 'en argent', '2.5', '1', '20.5', '23')";
-
             //open connection
             if (this.OpenConnection() == true)
             {
-                //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlCommand cmd;
 
                 //Execute command
-                cmd.ExecuteNonQuery();
 
-                //close connection
-                this.CloseConnection();
+                using (cmd = connection.CreateCommand())
+                {
+                    //cmd.CommandText = "INSERT INTO articles(reference,nom,description,prix_achat,code_fournisseur,marge_benef,prix_revente) VALUES(?referenceADonner,?nomADonner)";
+                    cmd.CommandText = "INSERT INTO articles(reference,nom,description,prix_achat,code_fournisseur,marge_benef,prix_revente,date_creation) VALUES(?referenceADonner,?nomADonner,?descriptionADonner,?prix_achatADonner,?codeADonner,?margeADonner,?prix_reventeADonner,NOW())";
+                    cmd.Parameters.Add("?referenceADonner", MySqlDbType.VarChar).Value = reference;
+                    cmd.Parameters.Add("?nomADonner", MySqlDbType.VarChar).Value = nom;
+                    cmd.Parameters.Add("?descriptionADonner", MySqlDbType.VarChar).Value = description;
+                    cmd.Parameters.Add("?prix_achatADonner", MySqlDbType.Decimal).Value = prix_achat;
+                    cmd.Parameters.Add("?codeADonner", MySqlDbType.Int32).Value = code;
+                    cmd.Parameters.Add("?margeADonner", MySqlDbType.Decimal).Value = marge;
+                    cmd.Parameters.Add("?prix_reventeADonner", MySqlDbType.Decimal).Value = prix_revente;
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
         }
 

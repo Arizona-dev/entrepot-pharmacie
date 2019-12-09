@@ -7,18 +7,23 @@ namespace entrepot_pharmacie
 {
     public class Caisse
     {
-        public int somme = 1000;
-        public string nom;
         Entrepot entrepot;
+        private int SoldeCaisse = 1000;
+        public int soldeCaisse {
+            get { return SoldeCaisse; }
+            set { SoldeCaisse = value; }
+        }
+        private string nomCaisse;
+        
 
         public void ajouter_argent(int a)
         {
-            somme = somme + a;
+            soldeCaisse = soldeCaisse + a;
         }
 
         public void retirer_argent(int a)
         {
-            somme = somme - a;
+            soldeCaisse = soldeCaisse - a;
         }
     }
 }

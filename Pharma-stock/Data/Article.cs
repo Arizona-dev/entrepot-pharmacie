@@ -10,13 +10,13 @@ namespace entrepot_pharmacie
         public string nom;
         public string reference;
         public string description;
-        public double prix_achat;
+        public decimal prix_achat;
         public int code_fournisseur;
-        public double marge_benef;
+        public decimal marge_benef;
         public int quantite;
 
 
-        public Article(string Name, string Ref, string Desc, double prix_a, int code, double marge, int Qte)
+        public Article(string Name, string Ref, string Desc, decimal prix_a, int code, decimal marge, int Qte)
         {
             nom = Name;
             reference = Ref;
@@ -28,9 +28,15 @@ namespace entrepot_pharmacie
 
         }
 
-        public static void Modifier_article(string nom, string reference, string description, double prix_a, int code, double marge, int Qte)
+        public void Modifier_article(string Name, string Ref, string Desc, decimal prix_a, int code, decimal marge, int Qte)
         {
-           
+            nom = Name;
+            reference = Ref;
+            description = Desc;
+            prix_achat = prix_a;
+            code_fournisseur = code;
+            marge_benef = marge;
+            quantite = Qte;
         }
 
         public void supprimer_article()
@@ -40,7 +46,7 @@ namespace entrepot_pharmacie
 
 
 
-        public Fournisseur Fournisseur
+        static Fournisseur Fournisseur
         {
             get => default;
             set

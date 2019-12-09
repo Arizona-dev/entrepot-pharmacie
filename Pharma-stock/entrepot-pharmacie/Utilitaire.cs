@@ -6,10 +6,50 @@ using System.Threading.Tasks;
 
 namespace entrepot_pharmacie
 {
-    class Utilitaire
+    public class Utilitaire
     {
-       
+        internal static (int, decimal) TestValeur(string inputString, bool isInt)
+        {
+            Boolean estValide = false;
+            Decimal outputDecimal = 0m;
+            int outputInt = 0;
+            if (isInt == true)
+            {
+                do
+                {
+                    estValide = true;
+                    try
+                    {
+                        outputInt = Convert.ToInt32(inputString);
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine($"Format incorrect '{inputString}'");
+                        inputString = Console.ReadLine();
+                        estValide = false;
+                    }
+                    
+                } while (!estValide);
+            } else
+            {
+                do
+                {
+                    estValide = true;
+                    try
+                    {
+                        outputDecimal = Convert.ToDecimal(inputString);
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine($"Format incorrect '{inputString}'");
+                        inputString = Console.ReadLine();
+                        estValide = false;
+                    }
+                } while (!estValide);
+            }
 
+            return (outputInt, outputDecimal);
+        }
 
         internal static Article ArticleExiste(List<Article> listArticle, String refProduit)
         {
