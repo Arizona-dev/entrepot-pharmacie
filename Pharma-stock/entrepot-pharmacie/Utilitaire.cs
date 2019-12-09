@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace entrepot_pharmacie
 {
     public class Utilitaire
     {
+        //Database database;
         internal static (int, decimal) TestValeur(string inputString, bool isInt)
         {
             Boolean estValide = false;
@@ -51,7 +53,7 @@ namespace entrepot_pharmacie
             return (outputInt, outputDecimal);
         }
 
-        internal static Article ArticleExiste(List<Article> listArticle, String refProduit)
+        internal static Article ArticleExiste(List<Article> listArticle, string refProduit)
         {
             foreach (Article a in listArticle)
             {
@@ -61,6 +63,11 @@ namespace entrepot_pharmacie
                 }
             }
             return null;
+        }
+
+        public void ArticleRecherche(string refProduit)
+        {
+            
         }
 
 

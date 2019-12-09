@@ -22,8 +22,9 @@ namespace entrepot_pharmacie
 
             //caisse.ajouter_argent(1000);
             //Console.WriteLine(caisse.somme);
-
-            Console.WriteLine("0) Quitter\n1) Voir solde\n2) Ajouter un produit\n3) Voir les produits disponibles\n4) Acheter un produit\n");
+            Console.WriteLine("Articles en stock :\n");
+            database.Select();
+            Console.WriteLine("\n0) Quitter\n1) Voir solde\n2) Ajouter un produit\n3) Rechercher un produit avec son nom ou sa référence produit\n4) Acheter un produit\n5) Supprimer un produit du stock\n");
             int result = 0;
             String name = "";
             String reference = "";
@@ -31,10 +32,8 @@ namespace entrepot_pharmacie
             Decimal prixHT = 0;
             int code = 0;
             Decimal marge = 0;
+            Decimal prixTTC = 0;
             int quantiteDispo = 0;
-            Boolean estValide = false;
-
-            
 
 
             String choice = Console.ReadLine();
@@ -49,12 +48,14 @@ namespace entrepot_pharmacie
             }
 
             while (result != 0) {
+                // Afficher le solde de la Caisse
                 if (result == 1)
                 {
                     Console.Clear();
                     Console.WriteLine(caisse.soldeCaisse + "\n");
                     result = 9;
                 }
+                // Ajouter un produit en stock
                 else if (result == 2)
                 {
                     Console.Clear();
@@ -80,25 +81,48 @@ namespace entrepot_pharmacie
                     String margeIn = Console.ReadLine();
                     marge = Utilitaire.TestValeur(margeIn, false).Item2;
 
-                    Console.WriteLine("Quantité disponible du produit : ");
+                    prixTTC = prixHT + marge;
+
+                    Console.WriteLine("Quantité à ajouter au stock : ");
                     String quantityIn = Console.ReadLine();
                     quantiteDispo = Utilitaire.TestValeur(quantityIn, true).Item1;
 
-                    article = new Article(name, reference, description, prixHT, code, marge, quantiteDispo);
+                    article = new Article(name, reference, description, prixHT, code, marge);
                     listArticle.Add(article);
-
-                    Console.WriteLine(reference + ", " + name + ", " + description + ", " + prixHT + ", " + code + ", " + marge + ", " + prixHT + marge + "\n");
-                    database.Insert(reference, name, description, prixHT, code, marge, quantiteDispo);
+                    database.Insert(reference, name, description, prixHT, code, marge, prixTTC, quantiteDispo);
 
                     result = 9;
                     Console.Clear();
-                    printInventory(listArticle);
+                    database.Select();
 
-                } else if (result == 3) {
+                }
+                // Rechercher un produit avec son nom ou sa référence produit
+                else if (result == 3) {
+                    int choix = 0;
+                    string refProduit = "";
+                    do
+                    {
+                        Console.Clear();
+                        Console.WriteLine("1) Recherche par nom de produit\n2) Recherche par référence de produit\n");
+                        String choixIn = Console.ReadLine();
+                        choix = Utilitaire.TestValeur(choixIn, true).Item1;
+                    } while (choix != 1 && choix != 2);
                     Console.Clear();
-                    printInventory(listArticle);
+                    if (choix == 1)
+                    {
+                        Console.WriteLine("Saisir un nom de produit\n");
+                        refProduit = Console.ReadLine();
+                        database.SelectArticle(refProduit, false);
+                    } else if (choix == 2)
+                    {
+                        Console.WriteLine("Saisir une référence de produit\n");
+                        refProduit = Console.ReadLine();
+                        database.SelectArticle(refProduit, true);
+                    }
                     result = 9;
-                } else if (result == 4)
+                } 
+                // Acheter un produit
+                else if (result == 4)
                 {
                     Console.Clear();
                     Console.WriteLine("Saisissez la reference du produit\n");
@@ -108,20 +132,13 @@ namespace entrepot_pharmacie
 
                     if (articleReturn != null)
                     {
-                        Console.WriteLine($"\nProduit trouvé :\nArticle: {articleReturn.nom} Réference:{articleReturn.reference} Description:{articleReturn.description} Prix_HT:{articleReturn.prix_achat} Code:{articleReturn.code_fournisseur} Marge:{articleReturn.marge_benef} Quantité:{articleReturn.quantite}\n");
+                        Console.WriteLine($"\nProduit trouvé :\nArticle: {articleReturn.nom} Réference:{articleReturn.reference} Description:{articleReturn.description} Prix_HT:{articleReturn.prix_achat}  Marge:{articleReturn.marge_benef} Code:{articleReturn.code_fournisseur}\n");
                         Console.WriteLine("Saisissez la quantitée :\n");
-                        String innbProduit = Console.ReadLine();
+                        String inNbProduit = Console.ReadLine();
                         int nbProduit = 0;
-                        try
-                        {
-                            nbProduit = Int32.Parse(innbProduit);
-                        }
-                        catch (FormatException)
-                        {
-                            Console.WriteLine($"Format incorrect '{choice}'");
-                            innbProduit = Console.ReadLine();
-                        }
+                        nbProduit = Utilitaire.TestValeur(inNbProduit, true).Item1;
                         
+                        /*
                         if(articleReturn.quantite >= nbProduit)
                         {
                             //articleReturn.Qte = nbProduit;
@@ -130,7 +147,7 @@ namespace entrepot_pharmacie
                         } else
                         {
                             Console.WriteLine($"Quantité souhaité non disponible, quantité restante : '{articleReturn.quantite}'");
-                        }
+                        }*/
 
                         
                     } else {
@@ -141,11 +158,13 @@ namespace entrepot_pharmacie
                 } else if (result == 5)
                 {
                     Console.Clear();
-                    
-                    
+                    Console.WriteLine("Entrer la reference du produit à supprimer :\n");
+                    String refProduit = Console.ReadLine();
+                    database.SelectArticle(refProduit, true);
+
                 }
 
-                    Console.WriteLine("0) Quitter\n1) Voir solde\n2) Ajouter un produit\n3) Voir les produits disponibles\n4) Acheter un produit\n");
+                    Console.WriteLine("0) Quitter\n1) Voir solde\n2) Ajouter un produit\n3) Rechercher un produit avec son nom ou sa référence produit\n4) Acheter un produit\n5) Supprimer un produit du stock\n");
                 choice = Console.ReadLine();
                 try
                 {
@@ -165,7 +184,7 @@ namespace entrepot_pharmacie
         {
             foreach (Article a in listArticle)
             {
-                Console.WriteLine($"Article: {a.nom} Réference:{a.reference} Description:{a.description} Prix_HT:{a.prix_achat} Code:{a.code_fournisseur} Marge:{a.marge_benef} Quantité:{a.quantite}\n");
+                Console.WriteLine($"Article: {a.nom} Réference:{a.reference} Description:{a.description} Prix_HT:{a.prix_achat} Code:{a.code_fournisseur} Marge:{a.marge_benef}\n");
             }
 
         }
