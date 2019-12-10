@@ -57,7 +57,7 @@ namespace entrepot_pharmacie
         {
             foreach (Article a in listArticle)
             {
-                if (a.reference == refProduit)
+                if (a.Reference == refProduit)
                 {
                     return a;
                 }

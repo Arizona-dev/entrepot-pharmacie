@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using entrepot_pharmacie;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -84,6 +85,7 @@ namespace Data
                 //Execute command
                 using (cmd = connection.CreateCommand())
                 {
+
                     cmd.CommandText = "INSERT INTO articles(reference,nom,description,prix_achat,code_fournisseur,marge_benef,prix_revente,date_creation) VALUES(?referenceADonner,?nomADonner,?descriptionADonner,?prix_achatADonner,?codeADonner,?margeADonner,?prix_reventeADonner,NOW())";
                     cmd.Parameters.Add("?referenceADonner", MySqlDbType.VarChar).Value = reference;
                     cmd.Parameters.Add("?nomADonner", MySqlDbType.VarChar).Value = nom;
@@ -136,13 +138,23 @@ namespace Data
         //Delete statement
         public void Delete(string reference)
         {
-            string query = "DELETE a, b FROM articles a INNER JOIN stock b WHERE b.refArticle = a.reference and a.reference = ?refADonner";
-
             if (this.OpenConnection() == true)
             {
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.Add("?refADonner", MySqlDbType.VarChar).Value = reference;
-                cmd.ExecuteNonQuery();
+                MySqlCommand cmd;
+                using (cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE a, b FROM articles a INNER JOIN stock b WHERE b.refArticle = a.reference and a.reference = ?refADonner";
+                    cmd.Parameters.Add("?refADonner", MySqlDbType.VarChar).Value = reference;
+                    int ligneSupp = cmd.ExecuteNonQuery();
+                    if (ligneSupp >= 1)
+                    {
+                        Console.WriteLine("Articles supprimé avec succès : " + ligneSupp + "\n");
+                    } else if (ligneSupp == 0)
+                    {
+                        Console.WriteLine("Auncu article trouvé avec cette référence produit\n");
+                    }
+                    
+                }
                 this.CloseConnection();
             }
         }
@@ -150,118 +162,93 @@ namespace Data
 
         //Select statement
         public void Select()
-        {
-            string query = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock FROM articles INNER JOIN stock ON articles.reference = stock.refArticle";
-
-            string reference = "";
-            string nom = "";
-            string description = "";
-            decimal prix_achat = 0m;
-            decimal marge_benef = 0m;
-            int qteStock = 0;
-
-
-            if (this.OpenConnection() == true)
-            {
-                
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                //Read the data and store them in the list
-                while (dataReader.Read())
-                {
-                    reference = dataReader.GetString("reference");
-                    nom = dataReader.GetString("nom");
-                    description = dataReader.GetString("description");
-                    prix_achat = dataReader.GetDecimal("prix_achat");
-                    marge_benef = dataReader.GetDecimal("marge_benef");
-                    qteStock = dataReader.GetInt16("qteStock");
-                    Console.WriteLine("article " + reference + " " + nom + " " + description + " " + prix_achat + " " + marge_benef + " " + qteStock);
-                }
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
-                this.CloseConnection();
-
-                //return list to be displayed
-            }
-        }
-
-        public void SelectArticles(string refInput)
-        {
-            string query = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock FROM articles INNER JOIN stock ON articles.reference = stock.refArticle WHERE articles.reference = ?refADonner";
-
-            string reference = "";
-            string nom = "";
-            string description = "";
-            decimal prix_achat = 0m;
-            decimal marge_benef = 0m;
-            int qteStock = 0;
-
-
-            if (this.OpenConnection() == true)
-            {
-
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                //Create a data reader and Execute the command
-                cmd.Parameters.Add("?refADonner", MySqlDbType.VarChar).Value = refInput;
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                //Read the data and store them in the list
-                while (dataReader.Read())
-                {
-                    reference = dataReader.GetString("reference");
-                    nom = dataReader.GetString("nom");
-                    description = dataReader.GetString("description");
-                    prix_achat = dataReader.GetDecimal("prix_achat");
-                    marge_benef = dataReader.GetDecimal("marge_benef");
-                    qteStock = dataReader.GetInt16("qteStock");
-                    
-                }
-                //close Data Reader
-                Console.WriteLine("article " + reference + " " + nom + " " + description + " " + prix_achat + " " + marge_benef + " " + qteStock + "\n");
-                dataReader.Close();
-
-                //close Connection
-                this.CloseConnection();
-
-                //return list to be displayed
-                
-            }
-        }
-
-        public void SelectArticle(string reference, Boolean isRef)
-        {
+        {   
             if (this.OpenConnection() == true)
             {
                 MySqlCommand cmd;
                 using (cmd = connection.CreateCommand())
                 {
-                    if (isRef == true)
-                    {
-                        cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock FROM articles INNER JOIN stock ON articles.reference = stock.refArticle WHERE articles.reference LIKE ?refADonner ";
-                        cmd.Parameters.AddWithValue("?refADonner", "%" + reference + "%");
-                    }
-                    else if (isRef == false)
-                    {
-                        cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock FROM articles LEFT JOIN stock ON articles.reference = stock.refArticle WHERE articles.nom LIKE ?refADonner ";
-                        cmd.Parameters.AddWithValue("?refADonner", "%" + reference + "%");
-                    }
+                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock FROM articles INNER JOIN stock ON articles.reference = stock.refArticle";
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.HasRows)
                         {
                             while (reader.Read())
                             {
+                                Console.WriteLine(reader[0].ToString() + " " + reader[1].ToString() + " " + reader[2].ToString() + " " + reader[3].ToString() + " " + reader[4].ToString() + " " + reader[5].ToString() + "\n");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Articles non trouvé\n");
+                        }
+                        reader.Close();
+                    }
+                }
+                this.CloseConnection();
+            }
+        }
+
+        
+        
+        public Article SelectArticleParReference(string reference)
+        {
+            decimal prixAchat;
+            if (this.OpenConnection() == true)
+            {
+                
+                MySqlCommand cmd;
+                using (cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock,code_fournisseur FROM articles INNER JOIN stock ON articles.reference = stock.refArticle WHERE articles.reference LIKE ?refADonner ";
+                    cmd.Parameters.AddWithValue("?refADonner", "%" + reference + "%");
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                prixAchat = Convert.ToDecimal(reader[3].ToString());
                                 Console.WriteLine(reader[0].ToString() +" "+ reader[1].ToString() + " " + reader[2].ToString() + " " + reader[3].ToString() + " " + reader[4].ToString() + " " + reader[5].ToString() + "\n");
+                                //Article article = new Article(reader[1].ToString(), reader[0].ToString(), reader[2].ToString(), prixAchat, code, reader[4].ToString(), reader[5].ToString());
+                                Console.WriteLine(prixAchat + "\n");
                             }
                         } else
                         {
                             Console.WriteLine("Article non trouvé\n");
                         }
+                        reader.Close();
+                    }
+                    this.CloseConnection();
+                }
+                //return article;
+            }
+            return null;
+        }
+
+        public void SelectArticleParNom(string nom)
+        {
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd;
+                using (cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock FROM articles LEFT JOIN stock ON articles.reference = stock.refArticle WHERE articles.nom LIKE ?refADonner ";
+                    cmd.Parameters.AddWithValue("?refADonner", "%" + nom + "%");
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                Console.WriteLine(reader[0].ToString() + " " + reader[1].ToString() + " " + reader[2].ToString() + " " + reader[3].ToString() + " " + reader[4].ToString() + " " + reader[5].ToString() + "\n");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Article non trouvé\n");
+                        }
+                        reader.Close();
                     }
                     this.CloseConnection();
                 }
