@@ -86,7 +86,7 @@ namespace Data
                 using (cmd = connection.CreateCommand())
                 {
 
-                    cmd.CommandText = "INSERT INTO articles(reference,nom,description,prix_achat,code_fournisseur,marge_benef,prix_revente,date_creation) VALUES(?referenceADonner,?nomADonner,?descriptionADonner,?prix_achatADonner,?codeADonner,?margeADonner,?prix_reventeADonner,NOW())";
+                    cmd.CommandText = "INSERT INTO articles(reference,nom,description,prix_achat,idFournisseur,marge_benef,prix_revente,date_creation) VALUES(?referenceADonner,?nomADonner,?descriptionADonner,?prix_achatADonner,?codeADonner,?margeADonner,?prix_reventeADonner,NOW())";
                     cmd.Parameters.Add("?referenceADonner", MySqlDbType.VarChar).Value = reference;
                     cmd.Parameters.Add("?nomADonner", MySqlDbType.VarChar).Value = nom;
                     cmd.Parameters.Add("?descriptionADonner", MySqlDbType.VarChar).Value = description;
@@ -95,7 +95,7 @@ namespace Data
                     cmd.Parameters.Add("?margeADonner", MySqlDbType.Decimal).Value = marge;
                     cmd.Parameters.Add("?prix_reventeADonner", MySqlDbType.Decimal).Value = prix_revente;
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "INSERT INTO stock(refArticle,qteStock,idEntrepot) VALUES(?referenceADonner,?qteStockADonner,?idEntrepotADonner)";
+                    cmd.CommandText = "INSERT INTO stock(Articles_reference,qteStock,Entrepot_idEntrepot,date_creation, date_modification) VALUES(?referenceADonner,?qteStockADonner,?idEntrepotADonner,NOW(),NOW())";
                     cmd.Parameters.Add("?qteStockADonner", MySqlDbType.Int32).Value = qteDispo;
                     cmd.Parameters.Add("?idEntrepotADonner", MySqlDbType.Int32).Value = 1;
                     cmd.ExecuteNonQuery();
@@ -168,14 +168,14 @@ namespace Data
                 MySqlCommand cmd;
                 using (cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock FROM articles INNER JOIN stock ON articles.reference = stock.refArticle";
+                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,SUM(qteStock),idFournisseur FROM articles INNER JOIN stock ON articles.reference = stock.Articles_reference WHERE articles.reference";
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.HasRows)
                         {
                             while (reader.Read())
                             {
-                                Console.WriteLine(reader[0].ToString() + " " + reader[1].ToString() + " " + reader[2].ToString() + " " + reader[3].ToString() + " " + reader[4].ToString() + " " + reader[5].ToString() + "\n");
+                                Console.WriteLine(reader[0].ToString() + " " + reader[1].ToString() + " " + reader[2].ToString() + " " + reader[3].ToString() + " " + reader[4].ToString() + " " + reader[5].ToString() + reader[6].ToString() + "\n");
                             }
                         }
                         else
@@ -193,14 +193,20 @@ namespace Data
         
         public Article SelectArticleParReference(string reference)
         {
+            string refArticle;
+            string nom;
+            string description;
             decimal prixAchat;
+            decimal marge;
+            int qteStock;
+            int code;
+            Article article = null;
             if (this.OpenConnection() == true)
             {
-                
                 MySqlCommand cmd;
                 using (cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock,code_fournisseur FROM articles INNER JOIN stock ON articles.reference = stock.refArticle WHERE articles.reference LIKE ?refADonner ";
+                    cmd.CommandText = "SELECT DISTINCT reference,nom,description,prix_achat,marge_benef,SUM(qteStock),code_fournisseur FROM articles INNER JOIN stock ON articles.reference = stock.Articles_reference WHERE articles.reference LIKE ?refADonner ";
                     cmd.Parameters.AddWithValue("?refADonner", "%" + reference + "%");
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -208,10 +214,16 @@ namespace Data
                         {
                             while (reader.Read())
                             {
-                                prixAchat = Convert.ToDecimal(reader[3].ToString());
-                                Console.WriteLine(reader[0].ToString() +" "+ reader[1].ToString() + " " + reader[2].ToString() + " " + reader[3].ToString() + " " + reader[4].ToString() + " " + reader[5].ToString() + "\n");
-                                //Article article = new Article(reader[1].ToString(), reader[0].ToString(), reader[2].ToString(), prixAchat, code, reader[4].ToString(), reader[5].ToString());
-                                Console.WriteLine(prixAchat + "\n");
+                                refArticle = reader[0].ToString();
+                                nom = reader[1].ToString();
+                                description = reader[2].ToString();
+                                prixAchat = Decimal.Parse(reader[3].ToString());
+                                marge = Decimal.Parse(reader[4].ToString());
+                                qteStock = Int32.Parse(reader[5].ToString());
+                                code = Int32.Parse(reader[6].ToString());
+                                
+                                article = new Article(nom, refArticle, description, prixAchat, code, marge, qteStock);
+                                Console.WriteLine("TEST VAR : " + article + "\n");
                             }
                         } else
                         {
@@ -221,7 +233,7 @@ namespace Data
                     }
                     this.CloseConnection();
                 }
-                //return article;
+                return article;
             }
             return null;
         }
