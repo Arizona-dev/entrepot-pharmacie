@@ -1,0 +1,27 @@
+﻿<Window x:Class="EntrepotUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EntrepotUI"
+        mc:Ignorable="d"
+        Title="Gestion de stock pour Pharmacie - Demo" Height="500" Width="900"
+        WindowStartupLocation="CenterScreen"
+        Icon="assets/medicine.png" ResizeMode="NoResize" FontFamily="Calibri" Background="#FFF1F1F1">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="119*"/>
+        </Grid.ColumnDefinitions>
+        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="38" Stroke="Black" VerticalAlignment="Top" Width="894" Grid.ColumnSpan="2"/>
+        <Button x:Name="button_options" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Height="32" Click="button_options_Click" BorderThickness="0" Margin="670,3,0,0" Grid.Column="1" BorderBrush="White">
+            <Button.ContextMenu>
+                <ContextMenu Background="#FFDC2424"/>
+            </Button.ContextMenu>
+            <Button.Background>
+                <ImageBrush ImageSource="settings.png" Stretch="Uniform"/>
+            </Button.Background>
+        </Button>
+
+    </Grid>
+</Window>

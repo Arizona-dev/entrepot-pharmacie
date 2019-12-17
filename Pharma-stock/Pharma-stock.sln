@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "entrepot-pharmacie", "entre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{FE965DE2-3344-4836-80E8-2744205BA7B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntrepotGUI", "EntrepotGUI\EntrepotGUI.csproj", "{97C630D0-AC8A-445C-AF6A-DA771A986BC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{FE965DE2-3344-4836-80E8-2744205BA7B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE965DE2-3344-4836-80E8-2744205BA7B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE965DE2-3344-4836-80E8-2744205BA7B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C630D0-AC8A-445C-AF6A-DA771A986BC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C630D0-AC8A-445C-AF6A-DA771A986BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C630D0-AC8A-445C-AF6A-DA771A986BC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C630D0-AC8A-445C-AF6A-DA771A986BC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

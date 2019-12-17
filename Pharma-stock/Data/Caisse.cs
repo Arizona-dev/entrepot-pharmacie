@@ -8,20 +8,20 @@ namespace entrepot_pharmacie
     public class Caisse
     {
         Entrepot entrepot;
-        private int SoldeCaisse = 1000;
-        public int soldeCaisse {
+        private decimal SoldeCaisse = 1000m;
+        public decimal soldeCaisse {
             get { return SoldeCaisse; }
             set { SoldeCaisse = value; }
         }
         private string nomCaisse;
         
 
-        public void ajouter_argent(int a)
+        public void AjouterArgent(int a)
         {
             soldeCaisse = soldeCaisse + a;
         }
 
-        public void retirer_argent(int a)
+        public void RetierArgent(int a)
         {
             soldeCaisse = soldeCaisse - a;
         }

@@ -23,7 +23,7 @@ namespace entrepot_pharmacie
         public decimal Marge_benef { get => marge_benef; set => marge_benef = value; }
         public int QuantiteStock { get => quantiteStock; set => quantiteStock = value; }
 
-        public Article(string Name, string Ref, string Desc, decimal prix_a, int code, decimal marge, int qteStock)
+        public Article(string Name, string Ref, string Desc, decimal prix_a, decimal marge, int code, int qteStock)
         {
             Nom = Name;
             Reference = Ref;
@@ -35,15 +35,8 @@ namespace entrepot_pharmacie
         }
         public Article() { }
 
-        public void Modifier_article(string Name, string Ref, string Desc, decimal prix_a, int code, decimal marge, int Qte)
+        public void Modifier_article(Article article)
         {
-            nom = Name;
-            reference = Ref;
-            description = Desc;
-            prix_achat = prix_a;
-            code_fournisseur = code;
-            marge_benef = marge;
-            //quantite = Qte;
         }
 
         public void supprimer_article()

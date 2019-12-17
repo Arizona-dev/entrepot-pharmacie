@@ -75,32 +75,28 @@ namespace Data
         }
 
         //Insert statement
-        public void Insert(string reference, string nom, string description, Decimal prix_achat, Int32 code, Decimal marge, Decimal prix_revente, Int32 qteDispo)
+        public void CreerArticle(Article article, int idEntrepot)
         {
-            //open connection
             if (this.OpenConnection() == true)
             {
                 MySqlCommand cmd;
-
-                //Execute command
                 using (cmd = connection.CreateCommand())
                 {
-
                     cmd.CommandText = "INSERT INTO articles(reference,nom,description,prix_achat,idFournisseur,marge_benef,prix_revente,date_creation) VALUES(?referenceADonner,?nomADonner,?descriptionADonner,?prix_achatADonner,?codeADonner,?margeADonner,?prix_reventeADonner,NOW())";
-                    cmd.Parameters.Add("?referenceADonner", MySqlDbType.VarChar).Value = reference;
-                    cmd.Parameters.Add("?nomADonner", MySqlDbType.VarChar).Value = nom;
-                    cmd.Parameters.Add("?descriptionADonner", MySqlDbType.VarChar).Value = description;
-                    cmd.Parameters.Add("?prix_achatADonner", MySqlDbType.Decimal).Value = prix_achat;
-                    cmd.Parameters.Add("?codeADonner", MySqlDbType.Int32).Value = code;
-                    cmd.Parameters.Add("?margeADonner", MySqlDbType.Decimal).Value = marge;
-                    cmd.Parameters.Add("?prix_reventeADonner", MySqlDbType.Decimal).Value = prix_revente;
+                    cmd.Parameters.Add("?referenceADonner", MySqlDbType.VarChar).Value = article.Reference;
+                    cmd.Parameters.Add("?nomADonner", MySqlDbType.VarChar).Value = article.Nom;
+                    cmd.Parameters.Add("?descriptionADonner", MySqlDbType.VarChar).Value = article.Description;
+                    cmd.Parameters.Add("?prix_achatADonner", MySqlDbType.Decimal).Value = article.Prix_achat;
+                    cmd.Parameters.Add("?codeADonner", MySqlDbType.Int32).Value = article.Code_fournisseur;
+                    cmd.Parameters.Add("?margeADonner", MySqlDbType.Decimal).Value = article.Marge_benef;
+                    cmd.Parameters.Add("?prix_reventeADonner", MySqlDbType.Decimal).Value = article.Prix_achat + article.Marge_benef;
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "INSERT INTO stock(Articles_reference,qteStock,Entrepot_idEntrepot,date_creation, date_modification) VALUES(?referenceADonner,?qteStockADonner,?idEntrepotADonner,NOW(),NOW())";
-                    cmd.Parameters.Add("?qteStockADonner", MySqlDbType.Int32).Value = qteDispo;
+                    cmd.CommandText = "INSERT INTO stock(Articles_reference,qteStock,idEntrepot,date_creation, date_modification) VALUES(?referenceADonner,?qteStockADonner,?idEntrepotADonner,NOW(),NOW())";
+                    cmd.Parameters.Add("?qteStockADonner", MySqlDbType.Int32).Value = article.QuantiteStock;
                     cmd.Parameters.Add("?idEntrepotADonner", MySqlDbType.Int32).Value = 1;
                     cmd.ExecuteNonQuery();
-                    this.CloseConnection();
                 }
+                this.CloseConnection();
             }
         }
 
@@ -159,8 +155,64 @@ namespace Data
             }
         }
 
+        // Si l'entrepot existe return True sinon False
+        public bool SelectEntrepotExist(int entrepot)
+        {
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd;
+                using (cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT idEntrepot FROM entrepot WHERE entrepot.idEntrepot = ?entrepot";
+                    cmd.Parameters.Add("?entrepot", MySqlDbType.Int32).Value = entrepot;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        return LigneExist(reader);
+                    }
+                }
+            }
+            return false;
+        }
 
-        //Select statement
+        // Si le code fournisseur existe return True sinon False
+        public bool SelectFournisseurExist(int fournisseur)
+        {
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd;
+                using (cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT idFournisseurs FROM fournisseurs WHERE fournisseurs.idFournisseurs = ?idFournisseur";
+                    cmd.Parameters.Add("?idFournisseur", MySqlDbType.Int32).Value = fournisseur;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        return LigneExist(reader);
+                    }
+                }
+            }
+            return false;
+        }
+
+        // Si la référence d'article existe return True sinon False
+        public bool SelectReferenceExist(string reference)
+        {
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd;
+                using (cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT reference FROM articles INNER JOIN stock ON articles.reference = stock.idArticle WHERE articles.reference = ?reference";
+                    cmd.Parameters.Add("?reference", MySqlDbType.VarChar).Value = reference;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        return LigneExist(reader);
+                    }
+                }
+            }
+            return false;
+        }
+
+        // Select articles list
         public void Select()
         {   
             if (this.OpenConnection() == true)
@@ -168,7 +220,7 @@ namespace Data
                 MySqlCommand cmd;
                 using (cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,SUM(qteStock),idFournisseur FROM articles INNER JOIN stock ON articles.reference = stock.Articles_reference WHERE articles.reference";
+                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock,idFournisseur,idEntrepot FROM articles INNER JOIN stock ON articles.reference = stock.idArticle WHERE articles.reference";
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.HasRows)
@@ -189,83 +241,96 @@ namespace Data
             }
         }
 
-        
-        
+
+        // Selectionner un article par sa référence
         public Article SelectArticleParReference(string reference)
         {
-            string refArticle;
-            string nom;
-            string description;
-            decimal prixAchat;
-            decimal marge;
-            int qteStock;
-            int code;
             Article article = null;
             if (this.OpenConnection() == true)
             {
                 MySqlCommand cmd;
                 using (cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT DISTINCT reference,nom,description,prix_achat,marge_benef,SUM(qteStock),code_fournisseur FROM articles INNER JOIN stock ON articles.reference = stock.Articles_reference WHERE articles.reference LIKE ?refADonner ";
-                    cmd.Parameters.AddWithValue("?refADonner", "%" + reference + "%");
+                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock,idFournisseur FROM articles INNER JOIN stock ON articles.reference = stock.idArticle WHERE articles.reference = ?reference";
+                    cmd.Parameters.Add("?reference", MySqlDbType.VarChar).Value = reference;
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.HasRows)
                         {
                             while (reader.Read())
                             {
-                                refArticle = reader[0].ToString();
-                                nom = reader[1].ToString();
-                                description = reader[2].ToString();
-                                prixAchat = Decimal.Parse(reader[3].ToString());
-                                marge = Decimal.Parse(reader[4].ToString());
-                                qteStock = Int32.Parse(reader[5].ToString());
-                                code = Int32.Parse(reader[6].ToString());
+                                string refArticle = reader[0].ToString();
+                                string nom = reader[1].ToString();
+                                string description = reader[2].ToString();
+                                decimal prixAchat = Decimal.Parse(reader[3].ToString());
+                                decimal marge = Decimal.Parse(reader[4].ToString());
+                                int qteStock = Int32.Parse(reader[5].ToString());
+                                int code = Int32.Parse(reader[6].ToString());
+                                article = new Article(nom, refArticle, description, prixAchat, marge, code, qteStock);
                                 
-                                article = new Article(nom, refArticle, description, prixAchat, code, marge, qteStock);
-                                Console.WriteLine("TEST VAR : " + article + "\n");
                             }
+                            reader.Close();
+                            this.CloseConnection();
+                            return article;
                         } else
                         {
                             Console.WriteLine("Article non trouvé\n");
+                            reader.Close();
+                            this.CloseConnection();
+                            return null;
                         }
-                        reader.Close();
                     }
-                    this.CloseConnection();
                 }
-                return article;
             }
             return null;
         }
-
-        public void SelectArticleParNom(string nom)
+        // Selectionner un article par son Nom
+        public Article SelectArticleParNom(string nomArticle)
         {
+            Article article = null;
             if (this.OpenConnection() == true)
             {
                 MySqlCommand cmd;
                 using (cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock FROM articles LEFT JOIN stock ON articles.reference = stock.refArticle WHERE articles.nom LIKE ?refADonner ";
-                    cmd.Parameters.AddWithValue("?refADonner", "%" + nom + "%");
+                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock,idFournisseur FROM articles LEFT JOIN stock ON articles.reference = stock.idArticle WHERE articles.nom = ?nomArticle ";
+                    cmd.Parameters.Add("?nomArticle", MySqlDbType.VarChar).Value = nomArticle;
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.HasRows)
                         {
                             while (reader.Read())
                             {
-                                Console.WriteLine(reader[0].ToString() + " " + reader[1].ToString() + " " + reader[2].ToString() + " " + reader[3].ToString() + " " + reader[4].ToString() + " " + reader[5].ToString() + "\n");
+                                string refArticle = reader[0].ToString();
+                                string nom = reader[1].ToString();
+                                string description = reader[2].ToString();
+                                decimal prixAchat = Decimal.Parse(reader[3].ToString());
+                                decimal marge = Decimal.Parse(reader[4].ToString());
+                                int qteStock = Int32.Parse(reader[5].ToString());
+                                int code = Int32.Parse(reader[6].ToString());
+                                article = new Article(nom, refArticle, description, prixAchat, marge, code, qteStock);
                             }
+                            reader.Close();
+                            this.CloseConnection();
+                            return article;
                         }
                         else
                         {
                             Console.WriteLine("Article non trouvé\n");
+                            reader.Close();
+                            this.CloseConnection();
+                            return null;
                         }
-                        reader.Close();
                     }
-                    this.CloseConnection();
                 }
             }
+            return null;
         }
+
+
+
+
+
         //Count statement
         public int Count()
         {
@@ -301,6 +366,26 @@ namespace Data
         {
         }
 
+        private bool LigneExist(MySqlDataReader reader)
+        {
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    //Console.WriteLine("Article trouvé\n");
+                }
+                reader.Close();
+                this.CloseConnection();
+                return true;
+            }
+            else
+            {
+                //Console.WriteLine("Article non trouvé\n");
+                reader.Close();
+                this.CloseConnection();
+                return false;
+            }
+        }
 
     }
 }
