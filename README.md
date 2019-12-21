@@ -1,2 +1,2 @@
 # entrepot-pharmacie
-Logiciel de gestion de stock pour pharmacies, codé en c#
+Logiciel de gestion de stock pour pharmacie, codé en c#
