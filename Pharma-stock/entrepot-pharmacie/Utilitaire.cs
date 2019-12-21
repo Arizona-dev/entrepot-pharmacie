@@ -65,11 +65,6 @@ namespace entrepot_pharmacie
             return null;
         }
 
-        public void ArticleRecherche(string refProduit)
-        {
-            
-        }
-
-
+        
     }
 }

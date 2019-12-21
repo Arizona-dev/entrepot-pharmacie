@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Data;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace entrepot_pharmacie
 {
     public class Program
     {
+        private static readonly int idCaisse = 1;
         static string name = "";
         static string reference = "";
         static string description = "";
@@ -16,30 +15,38 @@ namespace entrepot_pharmacie
         static decimal marge = 0;
         static int quantiteDispo = 0;
         static int idEntrepot = 0;
+        static int qteCommande = 0;
         
         static Article article;
         static void Main(string[] args)
         {
-            Caisse caisse = new Caisse();
-            Entrepot entrepot = new Entrepot();
+            ListMenu();
+        }
+
+        public static void ListMenu()
+        {
             List<Article> ListeArticle = new List<Article>();
             List<Article> ListePanier = new List<Article>();
             Data.Database database = new Data.Database();
+            Caisse.GetSolde(database.SelectSoldeCaisse(idCaisse));
             int result = 0;
             bool exit = false;
-
-            Console.WriteLine("1 - Acheter des articles\n2 - Afficher tout les articles\n3 - Gérer les clients\n4 - Gérer les fournisseurs et entrepôts\n");
+            Console.WriteLine("Solde de la Caisse : " + Caisse.soldeCaisse + " euros\n");
+            Console.WriteLine("Contenu du panier :\n");
+            printInventory(ListePanier);
+            Console.WriteLine("1 - Vendre des articles\n2 - Gérer les articles\n3 - Gérer les clients\n4 - Gérer les fournisseurs et entrepôts\n");
             string choice = Console.ReadLine();
             result = Utilitaire.TestValeur(choice, true).Item1;
-            while (!exit) { 
+            while (!exit)
+            {
                 switch (result)
                 {
                     case 1:
-                        AchatArticle(ListePanier);
-                        
+                        AchatArticle(ListePanier, database);
+
                         break;
                     case 2:
-                        Console.Clear();
+                        GererArticles(database);
                         break;
                     case 3:
                         Console.Clear();
@@ -49,231 +56,90 @@ namespace entrepot_pharmacie
                         break;
 
                     default:
-                    
+
                         break;
                 }
-
-            }
-
-            while (result != 0) {
-                // Afficher le solde de la Caisse
-                if (result == 1)
-                {
-                    Console.Clear();
-                    Console.WriteLine("Solde de la Caisse : " + caisse.soldeCaisse + " euros\n");
-                    result = 9;
-                }
-                // Ajouter un produit en stock
-                else if (result == 2)
-                {
-                    Console.Clear();
-                    Console.WriteLine("Remplir les informations du nouveau produit à ajouter au stock : ");
-                    Console.WriteLine("Nom du produit : ");
-                    name = Console.ReadLine();
-
-                    Console.WriteLine("\nNumero de référence du produit : ");
-                    reference = Console.ReadLine();
-                    if (database.SelectReferenceExist(reference))
-                    {
-                        do
-                        {
-                            Console.Clear();
-                            Console.WriteLine("\nUn produit existe déja sous cette référence, Utilisez une autre référence :\n");
-                            reference = Console.ReadLine();
-                        } while (database.SelectReferenceExist(reference));
-                    }
-
-                    Console.WriteLine("\nDescription du produit : ");
-                    description = Console.ReadLine();
-
-                    Console.WriteLine("\nPrix HT du produit : ");
-                    string prixIn = Console.ReadLine();
-                    prixHT = Utilitaire.TestValeur(prixIn, false).Item2;
-
-                    Console.WriteLine("\nCode fournisseur du produit : ");
-                    string codeIn = Console.ReadLine();
-                    code = Utilitaire.TestValeur(codeIn, true).Item1;
-
-                    if (database.SelectFournisseurExist(code) == false)
-                    {
-                        do
-                        {
-                            Console.Clear();
-                            Console.WriteLine("\nCe Fournisseur n'existe pas, Utilisez un autre code fournisseur :\n");
-                            codeIn = Console.ReadLine();
-                            code = Utilitaire.TestValeur(codeIn, true).Item1;
-                        } while (database.SelectFournisseurExist(code) == false);
-                    }
-
-                    Console.WriteLine("\nMarge du produit : ");
-                    string margeIn = Console.ReadLine();
-                    marge = Utilitaire.TestValeur(margeIn, false).Item2;
-
-                    Console.WriteLine("\nQuantité à ajouter au stock : ");
-                    string quantityIn = Console.ReadLine();
-                    quantiteDispo = Utilitaire.TestValeur(quantityIn, true).Item1;
-
-                    Console.WriteLine("\nNumero d'Entrepot ou sera stocké le produit : ");
-                    string idEntrepotIn = Console.ReadLine();
-                    idEntrepot = Utilitaire.TestValeur(idEntrepotIn, true).Item1;
-
-                    if (database.SelectEntrepotExist(idEntrepot) == false)
-                    {
-                        do
-                        {
-                            Console.Clear();
-                            Console.WriteLine("\nCet Entrepot n'existe pas, Utilisez un autre code Entrepot :\n");
-                            idEntrepotIn = Console.ReadLine();
-                            idEntrepot = Utilitaire.TestValeur(idEntrepotIn, true).Item1;
-                        } while (database.SelectEntrepotExist(idEntrepot) == false);
-                    }
-
-                    article = new Article(name, reference, description, prixHT, marge, code, quantiteDispo);
-                    ListeArticle.Add(article);
-
-                    database.CreerArticle(article, idEntrepot);
-
-                    result = 9;
-                    Console.Clear();
-                }
-                // Rechercher un produit avec son nom ou sa référence produit
-                else if (result == 3) {
-                    int choix = 0;
-                    do
-                    {
-                        Console.Clear();
-                        Console.WriteLine("1) Recherche par nom de produit\n2) Recherche par référence de produit\n");
-                        String choixIn = Console.ReadLine();
-                        choix = Utilitaire.TestValeur(choixIn, true).Item1;
-                    } while (choix != 1 && choix != 2);
-                    Console.Clear();
-                    if (choix == 1)
-                    {
-                        Console.WriteLine("Saisir le nom du produit\n");
-                        string nomProduit = Console.ReadLine();
-                        Article a = database.SelectArticleParNom(nomProduit);
-                            if (a != null)
-                            {
-                                Console.Clear();
-                                Console.WriteLine(a.Nom + " " + a.Prix_achat + "\n");
-                            }
-                        } else if (choix == 2)
-                    {
-                        Console.WriteLine("Saisir la référence du produit\n");
-                        string refProduit = Console.ReadLine();
-                        Article a = database.SelectArticleParReference(refProduit);
-                        if (a != null)
-                        {
-                            Console.Clear();
-                            Console.WriteLine(a.Nom + a.Prix_achat + "\n");
-                        }
-                    }
-                    result = 9;
-                } 
-                // Acheter un produit A FAIRE
-                else if (result == 4)
-                {
-                    Console.Clear();
-                    Console.WriteLine("Saisissez la reference du produit\n");
-                    String refProduit = Console.ReadLine();
-
-                    Article articleReturn = Utilitaire.ArticleExiste(ListeArticle, refProduit);
-
-                    if (articleReturn != null)
-                    {
-                        Console.WriteLine($"\nProduit trouvé :\nArticle: {articleReturn.Nom} Réference:{articleReturn.Reference} Description:{articleReturn.Description} Prix_HT:{articleReturn.Prix_achat}  Marge:{articleReturn.Marge_benef} Code:{articleReturn.Code_fournisseur}\n");
-                        Console.WriteLine("Saisissez la quantitée :\n");
-                        String inNbProduit = Console.ReadLine();
-                        int nbProduit = 0;
-                        nbProduit = Utilitaire.TestValeur(inNbProduit, true).Item1;
-                        
-                        /*
-                        if(articleReturn.quantite >= nbProduit)
-                        {
-                            //articleReturn.Qte = nbProduit;
-                            listPanier.Add(articleReturn);
-                            Commande commande = new Commande(listPanier);
-                        } else
-                        {
-                            Console.WriteLine($"Quantité souhaité non disponible, quantité restante : '{articleReturn.quantite}'");
-                        }*/
-
-                        
-                    } else {
-                        Console.Clear();
-                        Console.WriteLine("Reference de produit incorrect\n");
-                    }
-                    
-                } 
-                // Supprimer un produit à l'aide de sa référence produit
-                else if (result == 5)
-                {
-                    Console.Clear();
-                    Console.WriteLine("Entrer la reference exacte du produit à supprimer :\n");
-                    String refProduit = Console.ReadLine();
-                    database.Delete(refProduit);
-                } else if (result == 6)
-                {
-                    Console.Clear();
-                    Console.WriteLine("Entrer la reference du produit a trouver :\n");
-                    string refProduit = Console.ReadLine();
-                    Article a = database.SelectArticleParReference(refProduit);
-                    if (a != null)
-                    {
-                        Console.WriteLine($"Article: {a.Nom} Réference:{a.Reference} Description:{a.Description} Prix_HT:{a.Prix_achat} Code:{a.Code_fournisseur} Marge:{a.Marge_benef}\n");
-                    }
-                    
-                }
-
-
             }
         }
 
-        private static bool AchatArticle(List<Article> ListePanier)
+
+        public static bool AchatArticle(List<Article> ListePanier, Database db)
         {
+            Data.Database database = new Data.Database();
+            Caisse caisse = new Caisse();
             Console.Clear();
-            Console.WriteLine("1 - Afficher le panier\n2 - Rechercher un article par nom\n3 - Rechercher un article par référence\n4 - Ajouter un article à l'aide de sa référence dans le Panier\n");
+            Console.WriteLine("1 - Afficher le panier\n2 - Rechercher un article par nom\n3 - Rechercher un article par référence\n0 - Retour");
             string choice1 = Console.ReadLine();
             int result1 = Utilitaire.TestValeur(choice1, true).Item1;
             switch (result1)
             {
-                case 1: // afficher le panier
+                case 1: // afficher le panier OK
+                    Console.Clear();
+                    Console.WriteLine("Solde de la Caisse : " + Caisse.soldeCaisse + " euros\n");
                     Console.WriteLine("Contenu du panier :\n");
                     printInventory(ListePanier);
-                    bool exit = false;
+                    Console.WriteLine("1 - Valider la commande\n2 - Retirer un article du panier\n3 - Vider le panier\n0 - Retour");
+                    string choice = Console.ReadLine();
+                    int choix = Utilitaire.TestValeur(choice, true).Item1;
+                    if (choix == 1) // Valider commande OK
+                    {
+                        printInventory(ListePanier);
+                        Console.WriteLine("Souhaitez vous vraiment valider le Panier ?");
+                        string valider = Console.ReadLine();
+                        int Valider = Utilitaire.TestValeur(valider, true).Item1;
+                        if (Valider == 1)
+                        {
+                        db.InsertCommandeVente(ListePanier);
+                        db.MouvementStockVente(ListePanier);
+                        decimal TotalCommande = db.TotalCommande(ListePanier);
+                        caisse.AjouterArgent(TotalCommande, idCaisse);
+                        ListePanier.Clear();
+                        Console.WriteLine("Commande passé merci");
+                        Console.ReadLine();
+                        }
+                    }
+                    else if (choix == 2) // Retirer un article du panier
+                    {
+                                
+                    }
+                    else if (choix == 3) // Vider le panier
+                    {
+                    ListePanier.Clear();
+                    }
+                    else
+                    {
                         Console.Clear();
-                        Console.WriteLine("1 - Valider la commande\n2 - Retirer un article du panier\n3 - Vider le panier\n0 - Retour");
-                        string choice = Console.ReadLine();
-                        int choix = Utilitaire.TestValeur(choice, true).Item1;
-                        if (choix == 1)
-                        {
-                            // Valider commande
-                        }
-                        else if (choix == 2)
-                        {
-                            // Retirer un article du panier
-                            //ListePanier.Remove(article);
-                        }
-                        else if (choix == 3)
-                        {
-                            // Vider le panier
-                        }
-                        else
-                        {
-                            AchatArticle(ListePanier);
-                        }
+                        ListMenu();
+                    }
 
                     break;
-                case 2:
-                    //Rechercher un article par nom
-                    Data.Database database = new Data.Database();
+                case 2: //Rechercher un article par nom
                     Console.Clear();
                     Console.WriteLine("Entrer le nom de l'article\n");
                     string inputNom = Console.ReadLine();
-                    Article article = database.SelectArticleParNom(inputNom);
-
+                    Article a = database.SelectArticleParNom(inputNom);
+                    if (a != null)
+                    {
+                        Console.Clear();
+                        Console.WriteLine($"Article trouvé, Nom: {a.Nom} Réference:{a.Reference} Description:{a.Description} Prix_HT:{a.Prix_achat} Code:{a.Code_fournisseur} Marge:{a.Marge_benef} QuantitéDispo{a.QuantiteStock}\n");
+                        QuantiteAjoutPanier(a, ListePanier);
+                    }
                     break;
-                case 3:
+                case 3: //Rechercher un article par référence
+                    Console.Clear();
+                    Console.WriteLine("Entrer la référence de l'article\n");
+                    string inputRef = Console.ReadLine();
+                    Article b = database.SelectArticleParReference(inputRef);
+                    if (b != null)
+                    {
+                        Console.Clear();
+                        Console.WriteLine($"Article trouvé, Nom: {b.Nom} Réference:{b.Reference} Description:{b.Description} Prix_HT:{b.Prix_achat} Code:{b.Code_fournisseur} Marge:{b.Marge_benef} QuantitéDispo{b.QuantiteStock}\n");
+                        QuantiteAjoutPanier(b, ListePanier);
+                    }
+                    break;
+                case 4: //Retour menu principal
+                    Console.Clear();
+                    ListMenu();
                     break;
 
                 default:
@@ -358,11 +224,141 @@ namespace entrepot_pharmacie
         {
             foreach (Article a in listArticle)
             {
-                Console.WriteLine($"Article: {a.Nom} Réference:{a.Reference} Description:{a.Description} Prix_HT:{a.Prix_achat} Code:{a.Code_fournisseur} Marge:{a.Marge_benef}\n");
+                Console.WriteLine($"Nom: {a.Nom} Réference:{a.Reference} CodeFournisseur:{a.Code_fournisseur} Prix_HT:{a.Prix_achat}  Marge:{a.Marge_benef} QuantitéPanier:{a.QuantiteCommande}\n");
             }
 
         }
 
+        private static void QuantiteAjoutPanier(Article article, List<Article> ListePanier)
+        {
+            Data.Database database = new Data.Database();
+            int AjouterPanier;
+            do
+            {
+                Console.WriteLine("Voulez-vous ajouter cet article dans le panier?\n1 pour ajouter dans le panier OU 2 pour effectuer une autre recherche");
+                string ajouterPanier = Console.ReadLine();
+                AjouterPanier = Utilitaire.TestValeur(ajouterPanier, true).Item1;
+            } while (AjouterPanier != 1 && AjouterPanier != 2);
+            if (AjouterPanier == 1)
+            {
+                Console.Clear();
+                int QteAjout = 0;
+                do
+                {
+                    Console.WriteLine("Saisissez la quantité à ajouter dans le panier :");
+                    string qteAjout = Console.ReadLine();
+                    QteAjout = Utilitaire.TestValeur(qteAjout, true).Item1;
+                    if (database.QuantiteStockDispo(article, QteAjout) == true)
+                    {
+                        article.QuantiteCommande = QteAjout;
+                        ListePanier.Add(article);
+                        Console.WriteLine("Contenu du panier :\n");
+                        printInventory(ListePanier);
+                        Console.WriteLine("Article ajouté dans le panier");
+                        Console.ReadLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Quantité non disponible, veuillez saisir une autre quantité :");
+                    }
+                } while (database.QuantiteStockDispo(article, QteAjout) == false);
+            }
+        }
+
+        private static void AjouterArticleStock(Database database)
+        {
+            Console.Clear();
+            Console.WriteLine("Remplir les informations du nouveau produit à ajouter dans le stock : ");
+            Console.WriteLine("Nom du produit : ");
+            name = Console.ReadLine();
+
+            Console.WriteLine("\nNumero de référence du produit : ");
+            reference = Console.ReadLine();
+            if (database.SelectReferenceExist(reference))
+            {
+                do
+                {
+                    Console.Clear();
+                    Console.WriteLine("\nUn produit existe déja sous cette référence, Utilisez une autre référence :\n");
+                    reference = Console.ReadLine();
+                } while (database.SelectReferenceExist(reference));
+            }
+
+            Console.WriteLine("\nDescription du produit : ");
+            description = Console.ReadLine();
+
+            Console.WriteLine("\nCode fournisseur du produit : ");
+            string codeIn = Console.ReadLine();
+            code = Utilitaire.TestValeur(codeIn, true).Item1;
+
+            if (database.SelectFournisseurExist(code) == false)
+            {
+                do
+                {
+                    Console.Clear();
+                    Console.WriteLine("\nCe Fournisseur n'existe pas, Utilisez un autre code fournisseur :\n");
+                    codeIn = Console.ReadLine();
+                    code = Utilitaire.TestValeur(codeIn, true).Item1;
+                } while (database.SelectFournisseurExist(code) == false);
+            }
+
+            Console.WriteLine("\nPrix HT du produit : ");
+            string prixIn = Console.ReadLine();
+            prixHT = Utilitaire.TestValeur(prixIn, false).Item2;
+
+            Console.WriteLine("\nMarge du produit : ");
+            string margeIn = Console.ReadLine();
+            marge = Utilitaire.TestValeur(margeIn, false).Item2;
+
+            Console.WriteLine("\nQuantité à acheter : ");
+            string quantityIn = Console.ReadLine();
+            quantiteDispo = Utilitaire.TestValeur(quantityIn, true).Item1;
+
+            Console.WriteLine("\nNumero d'Entrepot où sera stocké le produit : ");
+            string idEntrepotIn = Console.ReadLine();
+            idEntrepot = Utilitaire.TestValeur(idEntrepotIn, true).Item1;
+
+            if (database.SelectEntrepotExist(idEntrepot) == false)
+            {
+                do
+                {
+                    Console.Clear();
+                    Console.WriteLine("\nCet Entrepot n'existe pas, Utilisez un autre code Entrepot :\n");
+                    idEntrepotIn = Console.ReadLine();
+                    idEntrepot = Utilitaire.TestValeur(idEntrepotIn, true).Item1;
+                } while (database.SelectEntrepotExist(idEntrepot) == false);
+            }
+
+            article = new Article(name, reference, description, prixHT, marge, code, quantiteDispo, qteCommande);
+
+            database.CreerArticle(article, idEntrepot);
+        }
+
+
+        private static void GererArticles(Database database)
+        {
+            Console.Clear();
+            Console.WriteLine("1 - Ajouter un article\n2 - Modifier un article\n3 - Supprimer un article\n");
+            string gererArticle = Console.ReadLine();
+            int GererArticle = Utilitaire.TestValeur(gererArticle, true).Item1;
+            if (GererArticle == 1)
+            {
+                AjouterArticleStock(database);
+            } 
+            else if(GererArticle == 2)
+            {
+
+            }
+            else if (GererArticle == 3)
+            {
+                // Supprimer un produit à l'aide de sa référence produit
+                Console.Clear();
+                Console.WriteLine("Entrer la reference exacte du produit à supprimer :\n");
+                String refProduit = Console.ReadLine();
+                database.DeleteArticle(refProduit);
+            }
+            GererArticles(database);
+        }
 
     }
 }
@@ -376,9 +372,7 @@ namespace entrepot_pharmacie
  * Modifier Fournisseur
  * Supprimer Fournisseur
  * 
- * Ajouter Article
  * Modifier Article
- * Supprimer Article
  * Acheter Article
  * 
  * Ajouter Client

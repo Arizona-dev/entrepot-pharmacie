@@ -30,14 +30,13 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(produits));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnEditProduit = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.btnAddProduct = new System.Windows.Forms.Button();
-            this.btnDeleteProduct = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnDeleteProduct = new System.Windows.Forms.Button();
+            this.btnAddProduct = new System.Windows.Forms.Button();
+            this.listeProduits = new System.Windows.Forms.DataGridView();
+            this.btnEditProduit = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listeProduits)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -45,12 +44,75 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.btnDeleteProduct);
             this.panel1.Controls.Add(this.btnAddProduct);
-            this.panel1.Controls.Add(this.dataGridView1);
+            this.panel1.Controls.Add(this.listeProduits);
             this.panel1.Controls.Add(this.btnEditProduit);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(706, 421);
             this.panel1.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(6, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(151, 23);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Liste des produits";
+            // 
+            // btnDeleteProduct
+            // 
+            this.btnDeleteProduct.BackColor = System.Drawing.Color.Transparent;
+            this.btnDeleteProduct.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnDeleteProduct.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnDeleteProduct.FlatAppearance.BorderSize = 0;
+            this.btnDeleteProduct.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.btnDeleteProduct.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDeleteProduct.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteProduct.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.btnDeleteProduct.Image = ((System.Drawing.Image)(resources.GetObject("btnDeleteProduct.Image")));
+            this.btnDeleteProduct.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDeleteProduct.Location = new System.Drawing.Point(575, 144);
+            this.btnDeleteProduct.Name = "btnDeleteProduct";
+            this.btnDeleteProduct.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.btnDeleteProduct.Size = new System.Drawing.Size(121, 40);
+            this.btnDeleteProduct.TabIndex = 6;
+            this.btnDeleteProduct.Tag = "";
+            this.btnDeleteProduct.Text = "Supprimer";
+            this.btnDeleteProduct.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnDeleteProduct.UseVisualStyleBackColor = false;
+            // 
+            // btnAddProduct
+            // 
+            this.btnAddProduct.BackColor = System.Drawing.Color.Transparent;
+            this.btnAddProduct.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnAddProduct.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAddProduct.FlatAppearance.BorderSize = 0;
+            this.btnAddProduct.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.btnAddProduct.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddProduct.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddProduct.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.btnAddProduct.Image = ((System.Drawing.Image)(resources.GetObject("btnAddProduct.Image")));
+            this.btnAddProduct.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAddProduct.Location = new System.Drawing.Point(575, 52);
+            this.btnAddProduct.Name = "btnAddProduct";
+            this.btnAddProduct.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.btnAddProduct.Size = new System.Drawing.Size(121, 40);
+            this.btnAddProduct.TabIndex = 5;
+            this.btnAddProduct.Tag = "";
+            this.btnAddProduct.Text = "Ajouter";
+            this.btnAddProduct.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnAddProduct.UseVisualStyleBackColor = false;
+            this.btnAddProduct.Click += new System.EventHandler(this.btnAddProduct_Click);
+            // 
+            // listeProduits
+            // 
+            this.listeProduits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.listeProduits.Location = new System.Drawing.Point(10, 52);
+            this.listeProduits.Name = "listeProduits";
+            this.listeProduits.Size = new System.Drawing.Size(559, 357);
+            this.listeProduits.TabIndex = 4;
             // 
             // btnEditProduit
             // 
@@ -75,75 +137,6 @@
             this.btnEditProduit.UseVisualStyleBackColor = false;
             this.btnEditProduit.Click += new System.EventHandler(this.BtnEditProduit_Click);
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1});
-            this.dataGridView1.Location = new System.Drawing.Point(10, 52);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(559, 357);
-            this.dataGridView1.TabIndex = 4;
-            // 
-            // btnAddProduct
-            // 
-            this.btnAddProduct.BackColor = System.Drawing.Color.Transparent;
-            this.btnAddProduct.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnAddProduct.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnAddProduct.FlatAppearance.BorderSize = 0;
-            this.btnAddProduct.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.btnAddProduct.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAddProduct.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAddProduct.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.btnAddProduct.Image = ((System.Drawing.Image)(resources.GetObject("btnAddProduct.Image")));
-            this.btnAddProduct.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddProduct.Location = new System.Drawing.Point(575, 52);
-            this.btnAddProduct.Name = "btnAddProduct";
-            this.btnAddProduct.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.btnAddProduct.Size = new System.Drawing.Size(121, 40);
-            this.btnAddProduct.TabIndex = 5;
-            this.btnAddProduct.Tag = "";
-            this.btnAddProduct.Text = "Ajouter";
-            this.btnAddProduct.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnAddProduct.UseVisualStyleBackColor = false;
-            // 
-            // btnDeleteProduct
-            // 
-            this.btnDeleteProduct.BackColor = System.Drawing.Color.Transparent;
-            this.btnDeleteProduct.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnDeleteProduct.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnDeleteProduct.FlatAppearance.BorderSize = 0;
-            this.btnDeleteProduct.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.btnDeleteProduct.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDeleteProduct.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDeleteProduct.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.btnDeleteProduct.Image = ((System.Drawing.Image)(resources.GetObject("btnDeleteProduct.Image")));
-            this.btnDeleteProduct.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDeleteProduct.Location = new System.Drawing.Point(575, 144);
-            this.btnDeleteProduct.Name = "btnDeleteProduct";
-            this.btnDeleteProduct.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.btnDeleteProduct.Size = new System.Drawing.Size(121, 40);
-            this.btnDeleteProduct.TabIndex = 6;
-            this.btnDeleteProduct.Tag = "";
-            this.btnDeleteProduct.Text = "Supprimer";
-            this.btnDeleteProduct.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnDeleteProduct.UseVisualStyleBackColor = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(6, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(151, 23);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Liste des produits";
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
-            // 
             // produits
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -156,7 +149,7 @@
             this.Text = "produits";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listeProduits)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -165,10 +158,9 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnEditProduit;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView listeProduits;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnDeleteProduct;
         private System.Windows.Forms.Button btnAddProduct;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
     }
 }
