@@ -8,8 +8,8 @@ namespace entrepot_pharmacie
 {
     public class Caisse
     {
-        private static decimal SoldeCaisse = 1000m;
-        private static int idCaisse = 1;
+        static decimal SoldeCaisse = 1000m;
+        static int idCaisse = 1;
         public static decimal soldeCaisse {
             get { return SoldeCaisse; }
             set { SoldeCaisse = value; }

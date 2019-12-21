@@ -7,14 +7,14 @@ namespace entrepot_pharmacie
 {
     public class Article
     {
-        private string nom;
-        private string reference;
-        private string description;
-        private decimal prix_achat;
-        private int code_fournisseur;
-        private decimal marge_benef;
-        private int quantiteStock;
-        private int quantiteCommande;
+        string nom;
+        string reference;
+        string description;
+        decimal prix_achat;
+        int code_fournisseur;
+        decimal marge_benef;
+        int quantiteStock;
+        int quantiteCommande;
 
         public string Nom { get => nom; set => nom = value; }
         public string Reference { get => reference; set => reference = value; }
@@ -36,25 +36,6 @@ namespace entrepot_pharmacie
             QuantiteStock = qteStock;
             QuantiteCommande = qteCommande;
         }
-        public Article() { }
-
-        public void Modifier_article(Article article)
-        {
-        }
-
-        public void supprimer_article()
-        {
-            throw new System.NotImplementedException();
-        }
-
-
-
-        static Fournisseur Fournisseur
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        
     }
 }

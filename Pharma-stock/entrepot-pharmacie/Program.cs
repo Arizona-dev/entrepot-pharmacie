@@ -20,15 +20,16 @@ namespace entrepot_pharmacie
         static Article article;
         static void Main(string[] args)
         {
-            ListMenu();
-        }
-
-        public static void ListMenu()
-        {
             List<Article> ListeArticle = new List<Article>();
             List<Article> ListePanier = new List<Article>();
             Data.Database database = new Data.Database();
             Caisse.GetSolde(database.SelectSoldeCaisse(idCaisse));
+            ListMenu(ListePanier);
+        }
+
+        public static void ListMenu(List<Article> ListePanier)
+        {
+            Data.Database database = new Data.Database();
             int result = 0;
             bool exit = false;
             Console.WriteLine("Solde de la Caisse : " + Caisse.soldeCaisse + " euros\n");
@@ -63,7 +64,7 @@ namespace entrepot_pharmacie
         }
 
 
-        public static bool AchatArticle(List<Article> ListePanier, Database db)
+        public static void AchatArticle(List<Article> ListePanier, Database db)
         {
             Data.Database database = new Data.Database();
             Caisse caisse = new Caisse();
@@ -106,10 +107,9 @@ namespace entrepot_pharmacie
                     {
                     ListePanier.Clear();
                     }
-                    else
+                    else if (choix == 0) // Retour menu principal
                     {
-                        Console.Clear();
-                        ListMenu();
+                        AchatArticle(ListePanier, db);
                     }
 
                     break;
@@ -137,15 +137,14 @@ namespace entrepot_pharmacie
                         QuantiteAjoutPanier(b, ListePanier);
                     }
                     break;
-                case 4: //Retour menu principal
+                case 0: //Retour menu principal
                     Console.Clear();
-                    ListMenu();
+                    ListMenu(ListePanier);
                     break;
 
                 default:
                     break;
             }
-            return true;
         }
         private static bool AfficherLesArticles()
         {
