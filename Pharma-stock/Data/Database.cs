@@ -18,7 +18,6 @@ namespace Data
         private string database;
         private string uid;
         private string password;
-        private MySqlDataAdapter mySqlDataAdapter;
 
         public Database()
         {
@@ -103,7 +102,7 @@ namespace Data
             {
                 using (MySqlCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = "INSERT INTO stock(idArticle,qteStock,idEntrepot,date_creation, date_modification) VALUES(?referenceADonner,?qteStockADonner,?idEntrepotADonner,NOW(),NOW())";
+                    cmd.CommandText = "INSERT INTO stock(idArticle,qteStock,idEntrepot) VALUES(?referenceADonner,?qteStockADonner,?idEntrepotADonner)";
                     cmd.Parameters.Add("?referenceADonner", MySqlDbType.VarChar).Value = article.Reference;
                     cmd.Parameters.Add("?qteStockADonner", MySqlDbType.Int32).Value = article.QuantiteStock;
                     cmd.Parameters.Add("?idEntrepotADonner", MySqlDbType.Int32).Value = idEntrepot;
@@ -330,23 +329,40 @@ namespace Data
             }
         }
 
-        public DataSet SelectProduit()
+        public DataTable SelectProduit()
         {
             if (this.OpenConnection() == true)
             {
-                MySqlCommand cmd;
-                using (cmd = connection.CreateCommand())
+                using (MySqlCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = "select * articles";
-                    mySqlDataAdapter = new MySqlDataAdapter(cmd.CommandText, connection);
-                    DataSet DS = new DataSet();
-                    mySqlDataAdapter.Fill(DS);
-                    //close connection
-                    CloseConnection();
-                    return DS;
+                    cmd.CommandText = "SELECT * FROM articles";
+                    MySqlDataAdapter SqlDataAdapter = new MySqlDataAdapter(cmd.CommandText, connection);
+                    DataTable DT = new DataTable();
+                    SqlDataAdapter.Fill(DT);
+                    this.CloseConnection();
+                    return DT;
                 }
             }
             return null;
+        }
+
+        public void UpdateListProduit(string reference, string nom, string description, decimal prixht, decimal marge)
+        {
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "UPDATE `articles` SET `reference`= ?reference,`nom`= ?nom,`description`= ?description,`marge_benef`= ?marge,`prix_revente`= ?prixTTC,`date_modification`=NOW() WHERE `reference` = ?reference";
+                    cmd.Parameters.Add("?reference", MySqlDbType.VarChar).Value = reference;
+                    cmd.Parameters.Add("?nom", MySqlDbType.VarChar).Value = nom;
+                    cmd.Parameters.Add("?description", MySqlDbType.VarChar).Value = description;
+                    cmd.Parameters.Add("?marge", MySqlDbType.Decimal).Value = marge;
+                    cmd.Parameters.Add("?prixTTC", MySqlDbType.Decimal).Value = prixht + marge;
+                    cmd.ExecuteNonQuery();
+
+                }
+                this.CloseConnection();
+            }
         }
 
         public void UpdateArticle(string reference, string name, string description, decimal marge)
@@ -571,5 +587,9 @@ namespace Data
             }
             
         }
+
+
     }
+
+
 }

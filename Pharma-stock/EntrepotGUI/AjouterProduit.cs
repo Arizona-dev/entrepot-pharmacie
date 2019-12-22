@@ -1,29 +1,47 @@
 ﻿using Data;
+using entrepot_pharmacie;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EntrepotGUI
 {
-    static class Program
+    public partial class AjouterProduit : Form
     {
-        /// <summary>
-        /// Point d'entrée principal de l'application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        //Code de https://stackoverflow.com/questions/1592876/make-a-borderless-form-movable
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hwnd, int wmsg, int wparam, int lparam);
+        
+        public int idCaisse
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            get { return Caisse.IdCaisse; }
+            set { Caisse.IdCaisse = value; }
+        }
+        public int idEntrepot
+        {
+            get { return Entrepot.IdEntrepot; }
+            set { Entrepot.IdEntrepot = value; }
         }
 
-        public void AddProduit()
+        public AjouterProduit()
+        {
+            InitializeComponent();
+            
+        }
+
+        private void btnAddProduct_Click(object sender, EventArgs e)
         {
             Data.Database database = new Data.Database();
-
+            
             string reference = refProduitTextbox.Text;
             if (reference == "")
             {
@@ -124,6 +142,16 @@ namespace EntrepotGUI
             this.Close();
         }
 
-       
+        private void btnAnnulerAjout_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void panel2_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
     }
 }

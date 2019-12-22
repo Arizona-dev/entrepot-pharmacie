@@ -1,4 +1,5 @@
-﻿using System;
+﻿using entrepot_pharmacie;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,15 +20,36 @@ namespace EntrepotGUI
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hwnd, int wmsg, int wparam, int lparam);
 
+        public int idCaisse
+        {
+            get { return Caisse.IdCaisse; }
+            set { Caisse.IdCaisse = value; }
+        }
 
         public Form1()
         {
             InitializeComponent();
+            
+        }
+
+        public void LoadForm()
+        {
+            Data.Database database = new Data.Database();
+            Caisse.GetSolde(database.SelectSoldeCaisse(idCaisse));
+            UpdateCaisse();
+            SoldeRefresh.Enabled = true;
+            SoldeRefresh.Start();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            LoadForm();
+        }
 
+        public void UpdateCaisse()
+        {
+            soldeLabel.Text = "Solde : " + Caisse.soldeCaisse + " €";
+            soldeLabel.Refresh();
         }
 
         private void button_close_Click(object sender, EventArgs e)
@@ -72,6 +94,16 @@ namespace EntrepotGUI
         private void btnProduits_Click(object sender, EventArgs e)
         {
             FormDansPanel(new produits());
+        }
+
+        private void panelTitle_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void SoldeRefresh_Tick(object sender, EventArgs e)
+        {
+            UpdateCaisse();
         }
     }
 }

@@ -28,23 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panelMenu = new System.Windows.Forms.Panel();
+            this.soldeLabel = new System.Windows.Forms.Label();
+            this.btnMore = new System.Windows.Forms.Button();
+            this.btnEntrepot = new System.Windows.Forms.Button();
+            this.btnClients = new System.Windows.Forms.Button();
+            this.btnVentes = new System.Windows.Forms.Button();
+            this.btnProduits = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelTitle = new System.Windows.Forms.Panel();
-            this.panelContent = new System.Windows.Forms.Panel();
             this.buttonMinimize = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btnProduits = new System.Windows.Forms.Button();
-            this.btnVentes = new System.Windows.Forms.Button();
-            this.btnClients = new System.Windows.Forms.Button();
-            this.btnEntrepot = new System.Windows.Forms.Button();
-            this.btnMore = new System.Windows.Forms.Button();
+            this.panelContent = new System.Windows.Forms.Panel();
+            this.SoldeRefresh = new System.Windows.Forms.Timer(this.components);
             this.panelMenu.SuspendLayout();
-            this.panelTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panelTitle.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelMenu
@@ -63,6 +66,123 @@
             this.panelMenu.Size = new System.Drawing.Size(180, 461);
             this.panelMenu.TabIndex = 0;
             // 
+            // soldeLabel
+            // 
+            this.soldeLabel.AutoSize = true;
+            this.soldeLabel.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold);
+            this.soldeLabel.ForeColor = System.Drawing.Color.Black;
+            this.soldeLabel.Location = new System.Drawing.Point(487, 9);
+            this.soldeLabel.Name = "soldeLabel";
+            this.soldeLabel.Size = new System.Drawing.Size(99, 19);
+            this.soldeLabel.TabIndex = 6;
+            this.soldeLabel.Text = "Solde : 0,00 €";
+            // 
+            // btnMore
+            // 
+            this.btnMore.BackColor = System.Drawing.Color.Transparent;
+            this.btnMore.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMore.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMore.FlatAppearance.BorderSize = 0;
+            this.btnMore.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.btnMore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMore.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMore.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnMore.Image = ((System.Drawing.Image)(resources.GetObject("btnMore.Image")));
+            this.btnMore.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMore.Location = new System.Drawing.Point(0, 300);
+            this.btnMore.Name = "btnMore";
+            this.btnMore.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnMore.Size = new System.Drawing.Size(180, 40);
+            this.btnMore.TabIndex = 5;
+            this.btnMore.Tag = "";
+            this.btnMore.Text = "Caisse";
+            this.btnMore.UseVisualStyleBackColor = false;
+            // 
+            // btnEntrepot
+            // 
+            this.btnEntrepot.BackColor = System.Drawing.Color.Transparent;
+            this.btnEntrepot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnEntrepot.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnEntrepot.FlatAppearance.BorderSize = 0;
+            this.btnEntrepot.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.btnEntrepot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEntrepot.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEntrepot.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnEntrepot.Image = ((System.Drawing.Image)(resources.GetObject("btnEntrepot.Image")));
+            this.btnEntrepot.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnEntrepot.Location = new System.Drawing.Point(0, 250);
+            this.btnEntrepot.Name = "btnEntrepot";
+            this.btnEntrepot.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnEntrepot.Size = new System.Drawing.Size(180, 40);
+            this.btnEntrepot.TabIndex = 4;
+            this.btnEntrepot.Tag = "";
+            this.btnEntrepot.Text = "Entrepot";
+            this.btnEntrepot.UseVisualStyleBackColor = false;
+            // 
+            // btnClients
+            // 
+            this.btnClients.BackColor = System.Drawing.Color.Transparent;
+            this.btnClients.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnClients.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnClients.FlatAppearance.BorderSize = 0;
+            this.btnClients.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.btnClients.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClients.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClients.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnClients.Image = ((System.Drawing.Image)(resources.GetObject("btnClients.Image")));
+            this.btnClients.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnClients.Location = new System.Drawing.Point(0, 200);
+            this.btnClients.Name = "btnClients";
+            this.btnClients.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnClients.Size = new System.Drawing.Size(180, 40);
+            this.btnClients.TabIndex = 3;
+            this.btnClients.Tag = "";
+            this.btnClients.Text = "Clients";
+            this.btnClients.UseVisualStyleBackColor = false;
+            // 
+            // btnVentes
+            // 
+            this.btnVentes.BackColor = System.Drawing.Color.Transparent;
+            this.btnVentes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnVentes.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnVentes.FlatAppearance.BorderSize = 0;
+            this.btnVentes.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.btnVentes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVentes.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVentes.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnVentes.Image = ((System.Drawing.Image)(resources.GetObject("btnVentes.Image")));
+            this.btnVentes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnVentes.Location = new System.Drawing.Point(0, 150);
+            this.btnVentes.Name = "btnVentes";
+            this.btnVentes.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnVentes.Size = new System.Drawing.Size(180, 40);
+            this.btnVentes.TabIndex = 2;
+            this.btnVentes.Tag = "";
+            this.btnVentes.Text = "Ventes";
+            this.btnVentes.UseVisualStyleBackColor = false;
+            // 
+            // btnProduits
+            // 
+            this.btnProduits.BackColor = System.Drawing.Color.Transparent;
+            this.btnProduits.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnProduits.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnProduits.FlatAppearance.BorderSize = 0;
+            this.btnProduits.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.btnProduits.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnProduits.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnProduits.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnProduits.Image = ((System.Drawing.Image)(resources.GetObject("btnProduits.Image")));
+            this.btnProduits.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnProduits.Location = new System.Drawing.Point(0, 100);
+            this.btnProduits.Name = "btnProduits";
+            this.btnProduits.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnProduits.Size = new System.Drawing.Size(180, 40);
+            this.btnProduits.TabIndex = 1;
+            this.btnProduits.Tag = "";
+            this.btnProduits.Text = "Produits";
+            this.btnProduits.UseVisualStyleBackColor = false;
+            this.btnProduits.Click += new System.EventHandler(this.btnProduits_Click);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -75,9 +195,20 @@
             this.label1.Text = "Gestion de stock\r\nPharmacie\r\nDemo\r\n";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::EntrepotGUI.Properties.Resources.medicine;
+            this.pictureBox1.Location = new System.Drawing.Point(2, 8);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
+            // 
             // panelTitle
             // 
             this.panelTitle.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panelTitle.Controls.Add(this.soldeLabel);
             this.panelTitle.Controls.Add(this.buttonMinimize);
             this.panelTitle.Controls.Add(this.button1);
             this.panelTitle.Controls.Add(this.buttonClose);
@@ -86,15 +217,8 @@
             this.panelTitle.Name = "panelTitle";
             this.panelTitle.Size = new System.Drawing.Size(704, 40);
             this.panelTitle.TabIndex = 1;
+            this.panelTitle.Paint += new System.Windows.Forms.PaintEventHandler(this.panelTitle_Paint);
             this.panelTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTitle_MouseDown);
-            // 
-            // panelContent
-            // 
-            this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContent.Location = new System.Drawing.Point(180, 40);
-            this.panelContent.Name = "panelContent";
-            this.panelContent.Size = new System.Drawing.Size(704, 421);
-            this.panelContent.TabIndex = 2;
             // 
             // buttonMinimize
             // 
@@ -143,121 +267,18 @@
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.button_close_Click);
             // 
-            // pictureBox1
+            // panelContent
             // 
-            this.pictureBox1.Image = global::EntrepotGUI.Properties.Resources.medicine;
-            this.pictureBox1.Location = new System.Drawing.Point(2, 8);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(50, 50);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
+            this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContent.Location = new System.Drawing.Point(180, 40);
+            this.panelContent.Name = "panelContent";
+            this.panelContent.Size = new System.Drawing.Size(704, 421);
+            this.panelContent.TabIndex = 2;
             // 
-            // btnProduits
+            // SoldeRefresh
             // 
-            this.btnProduits.BackColor = System.Drawing.Color.Transparent;
-            this.btnProduits.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnProduits.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnProduits.FlatAppearance.BorderSize = 0;
-            this.btnProduits.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.btnProduits.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnProduits.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnProduits.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnProduits.Image = ((System.Drawing.Image)(resources.GetObject("btnProduits.Image")));
-            this.btnProduits.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnProduits.Location = new System.Drawing.Point(0, 100);
-            this.btnProduits.Name = "btnProduits";
-            this.btnProduits.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btnProduits.Size = new System.Drawing.Size(180, 40);
-            this.btnProduits.TabIndex = 1;
-            this.btnProduits.Tag = "";
-            this.btnProduits.Text = "Produits";
-            this.btnProduits.UseVisualStyleBackColor = false;
-            this.btnProduits.Click += new System.EventHandler(this.btnProduits_Click);
-            // 
-            // btnVentes
-            // 
-            this.btnVentes.BackColor = System.Drawing.Color.Transparent;
-            this.btnVentes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnVentes.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnVentes.FlatAppearance.BorderSize = 0;
-            this.btnVentes.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.btnVentes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnVentes.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnVentes.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnVentes.Image = ((System.Drawing.Image)(resources.GetObject("btnVentes.Image")));
-            this.btnVentes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnVentes.Location = new System.Drawing.Point(0, 150);
-            this.btnVentes.Name = "btnVentes";
-            this.btnVentes.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btnVentes.Size = new System.Drawing.Size(180, 40);
-            this.btnVentes.TabIndex = 2;
-            this.btnVentes.Tag = "";
-            this.btnVentes.Text = "Ventes";
-            this.btnVentes.UseVisualStyleBackColor = false;
-            // 
-            // btnClients
-            // 
-            this.btnClients.BackColor = System.Drawing.Color.Transparent;
-            this.btnClients.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnClients.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnClients.FlatAppearance.BorderSize = 0;
-            this.btnClients.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.btnClients.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClients.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClients.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnClients.Image = ((System.Drawing.Image)(resources.GetObject("btnClients.Image")));
-            this.btnClients.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClients.Location = new System.Drawing.Point(0, 200);
-            this.btnClients.Name = "btnClients";
-            this.btnClients.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btnClients.Size = new System.Drawing.Size(180, 40);
-            this.btnClients.TabIndex = 3;
-            this.btnClients.Tag = "";
-            this.btnClients.Text = "Clients";
-            this.btnClients.UseVisualStyleBackColor = false;
-            // 
-            // btnEntrepot
-            // 
-            this.btnEntrepot.BackColor = System.Drawing.Color.Transparent;
-            this.btnEntrepot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnEntrepot.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnEntrepot.FlatAppearance.BorderSize = 0;
-            this.btnEntrepot.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.btnEntrepot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnEntrepot.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEntrepot.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnEntrepot.Image = ((System.Drawing.Image)(resources.GetObject("btnEntrepot.Image")));
-            this.btnEntrepot.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEntrepot.Location = new System.Drawing.Point(0, 250);
-            this.btnEntrepot.Name = "btnEntrepot";
-            this.btnEntrepot.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btnEntrepot.Size = new System.Drawing.Size(180, 40);
-            this.btnEntrepot.TabIndex = 4;
-            this.btnEntrepot.Tag = "";
-            this.btnEntrepot.Text = "Entrepot";
-            this.btnEntrepot.UseVisualStyleBackColor = false;
-            // 
-            // btnMore
-            // 
-            this.btnMore.BackColor = System.Drawing.Color.Transparent;
-            this.btnMore.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnMore.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMore.FlatAppearance.BorderSize = 0;
-            this.btnMore.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.btnMore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMore.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMore.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnMore.Image = ((System.Drawing.Image)(resources.GetObject("btnMore.Image")));
-            this.btnMore.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMore.Location = new System.Drawing.Point(0, 300);
-            this.btnMore.Name = "btnMore";
-            this.btnMore.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btnMore.Size = new System.Drawing.Size(180, 40);
-            this.btnMore.TabIndex = 5;
-            this.btnMore.Tag = "";
-            this.btnMore.Text = "Autres";
-            this.btnMore.UseVisualStyleBackColor = false;
+            this.SoldeRefresh.Interval = 1000;
+            this.SoldeRefresh.Tick += new System.EventHandler(this.SoldeRefresh_Tick);
             // 
             // Form1
             // 
@@ -276,8 +297,9 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panelMenu.ResumeLayout(false);
             this.panelMenu.PerformLayout();
-            this.panelTitle.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panelTitle.ResumeLayout(false);
+            this.panelTitle.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -297,6 +319,8 @@
         private System.Windows.Forms.Button btnEntrepot;
         private System.Windows.Forms.Button btnClients;
         private System.Windows.Forms.Button btnVentes;
+        internal System.Windows.Forms.Label soldeLabel;
+        private System.Windows.Forms.Timer SoldeRefresh;
     }
 }
 

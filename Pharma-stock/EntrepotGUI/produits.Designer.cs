@@ -82,6 +82,7 @@
             this.btnDeleteProduct.Text = "Supprimer";
             this.btnDeleteProduct.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnDeleteProduct.UseVisualStyleBackColor = false;
+            this.btnDeleteProduct.Click += new System.EventHandler(this.btnDeleteProduct_Click);
             // 
             // btnAddProduct
             // 
@@ -108,9 +109,14 @@
             // 
             // listeProduits
             // 
+            this.listeProduits.AllowUserToAddRows = false;
+            this.listeProduits.AllowUserToDeleteRows = false;
             this.listeProduits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.listeProduits.Location = new System.Drawing.Point(10, 52);
+            this.listeProduits.MultiSelect = false;
             this.listeProduits.Name = "listeProduits";
+            this.listeProduits.ReadOnly = true;
+            this.listeProduits.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.listeProduits.Size = new System.Drawing.Size(559, 357);
             this.listeProduits.TabIndex = 4;
             // 
@@ -147,6 +153,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "produits";
             this.Text = "produits";
+            this.Load += new System.EventHandler(this.produits_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.listeProduits)).EndInit();
@@ -158,9 +165,9 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnEditProduit;
-        private System.Windows.Forms.DataGridView listeProduits;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnDeleteProduct;
         private System.Windows.Forms.Button btnAddProduct;
+        internal System.Windows.Forms.DataGridView listeProduits;
     }
 }

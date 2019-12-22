@@ -23,6 +23,7 @@ namespace entrepot_pharmacie
             List<Article> ListeArticle = new List<Article>();
             List<Article> ListePanier = new List<Article>();
             Data.Database database = new Data.Database();
+            Caisse caisse = new Caisse();
             Caisse.GetSolde(database.SelectSoldeCaisse(idCaisse));
             ListMenu(ListePanier);
         }
@@ -347,6 +348,7 @@ namespace entrepot_pharmacie
 
             database.CreerArticle(article, idEntrepot);
             decimal TotalCommande = database.TotalCommandeAchat(prixHT, quantiteDispo);
+            Caisse caisse = new Caisse();
             Caisse.RetirerArgent(TotalCommande, idCaisse);
         }
 
@@ -420,6 +422,7 @@ namespace entrepot_pharmacie
                 Console.WriteLine("Entrer le montant à retirer de la caisse : \n");
                 string setSolde = Console.ReadLine();
                 decimal SetSolde = Utilitaire.TestValeur(setSolde, false).Item2;
+                Caisse caisse = new Caisse();
                 Caisse.RetirerArgent(SetSolde, idCaisse);
             }
             else if (GererCaisse == 0)

@@ -10,7 +10,12 @@ namespace entrepot_pharmacie
         Caisse caisse;
         
         Article article;
-        public List<Entrepot> listStock;
+        private static int idEntrepot = 1;
+        public static int IdEntrepot
+        {
+            get { return idEntrepot; }
+            set { idEntrepot = value; }
+        }
 
         public Fournisseur listeFournisseur
         {
