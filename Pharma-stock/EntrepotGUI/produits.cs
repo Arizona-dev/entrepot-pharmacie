@@ -7,14 +7,13 @@ namespace EntrepotGUI
 {
     public partial class produits : Form
     {
-        Data.Database db;
 
         public produits()
         {
             InitializeComponent();
             Data.Database database = new Data.Database();
-            DataSet DS = db.SelectProduit();
-            listeProduits.DataSource = DS.Tables[0];
+            //DataSet DS = db.SelectProduit();
+            //listeProduits.DataSource = DS.Tables[0];
         }
         
         private void produits_Load(object sender, EventArgs e)

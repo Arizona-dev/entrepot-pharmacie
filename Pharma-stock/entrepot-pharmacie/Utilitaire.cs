@@ -65,6 +65,18 @@ namespace entrepot_pharmacie
             return null;
         }
 
-        
+        internal static bool RefArticleExisteDansList(List<Article> listArticle, string refProduit)
+        {
+            foreach (Article a in listArticle)
+            {
+                if (a.Reference == refProduit)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
     }
 }

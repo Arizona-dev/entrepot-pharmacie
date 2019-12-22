@@ -91,7 +91,20 @@ namespace Data
                     cmd.Parameters.Add("?margeADonner", MySqlDbType.Decimal).Value = article.Marge_benef;
                     cmd.Parameters.Add("?prix_reventeADonner", MySqlDbType.Decimal).Value = article.Prix_achat + article.Marge_benef;
                     cmd.ExecuteNonQuery();
+                }
+                this.CloseConnection();
+                InsertArticleStock(article, idEntrepot);
+            }
+        }
+
+        public void InsertArticleStock(Article article, int idEntrepot)
+        {
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = connection.CreateCommand())
+                {
                     cmd.CommandText = "INSERT INTO stock(idArticle,qteStock,idEntrepot,date_creation, date_modification) VALUES(?referenceADonner,?qteStockADonner,?idEntrepotADonner,NOW(),NOW())";
+                    cmd.Parameters.Add("?referenceADonner", MySqlDbType.VarChar).Value = article.Reference;
                     cmd.Parameters.Add("?qteStockADonner", MySqlDbType.Int32).Value = article.QuantiteStock;
                     cmd.Parameters.Add("?idEntrepotADonner", MySqlDbType.Int32).Value = idEntrepot;
                     cmd.ExecuteNonQuery();
@@ -192,22 +205,23 @@ namespace Data
         {   
             if (this.OpenConnection() == true)
             {
-                MySqlCommand cmd;
-                using (cmd = connection.CreateCommand())
+                using (MySqlCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock,idFournisseur,idEntrepot FROM articles INNER JOIN stock ON articles.reference = stock.idArticle WHERE articles.reference";
+                    cmd.CommandText = "SELECT reference,nom,description,prix_achat,marge_benef,qteStock,idFournisseur,idEntrepot FROM articles INNER JOIN stock ON articles.reference = stock.idArticle";
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.HasRows)
                         {
                             while (reader.Read())
                             {
-                                Console.WriteLine(reader[0].ToString() + " " + reader[1].ToString() + " " + reader[2].ToString() + " " + reader[3].ToString() + " " + reader[4].ToString() + " " + reader[5].ToString() + reader[6].ToString() + "\n");
+                                Console.WriteLine("Référence: " + reader[0].ToString() + " Nom: " + reader[1].ToString() + " Description: " + reader[2].ToString() + " PrixHT: " + reader[3].ToString() + " Marge: " + reader[4].ToString() + " QuantitéStock: " + reader[5].ToString() + " Code: " + reader[6].ToString() + "\n");
+                                
                             }
+                            Console.ReadLine();
                         }
                         else
                         {
-                            Console.WriteLine("Articles non trouvé\n");
+                            Console.WriteLine("Aucun Articles\n");
                         }
                         reader.Close();
                     }
@@ -215,7 +229,6 @@ namespace Data
                 this.CloseConnection();
             }
         }
-
 
         // Selectionner un article par sa référence
         public Article SelectArticleParReference(string reference)
@@ -241,7 +254,6 @@ namespace Data
                                 int qteStock = int.Parse(reader[5].ToString());
                                 int code = int.Parse(reader[6].ToString());
                                 article = new Article(nom, refArticle, description, prixAchat, marge, code, qteStock, 0);
-                                
                             }
                             reader.Close();
                             this.CloseConnection();
@@ -337,7 +349,43 @@ namespace Data
             return null;
         }
 
-        public decimal TotalCommande(List<Article> listArticle)
+        public void UpdateArticle(string reference, string name, string description, decimal marge)
+        {
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "UPDATE `articles` SET `nom`= ?newName,`description`= ?newDescription,`marge_benef`= ?newMarge,`date_modification`= NOW() WHERE `reference` = ?idReference";
+                    cmd.Parameters.Add("?newName", MySqlDbType.String).Value = name;
+                    cmd.Parameters.Add("?newDescription", MySqlDbType.String).Value = description;
+                    cmd.Parameters.Add("?newMarge", MySqlDbType.Decimal).Value = marge;
+                    cmd.Parameters.Add("?idReference", MySqlDbType.String).Value = reference;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            this.CloseConnection();
+        }
+
+        public void InsertClient(string nom, string prenom, string adresse, string telephone, string email, DateTime date)
+        {
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "INSERT INTO `clients`(`nom`, `prenom`, `adresse`, `telephone`, `email`, `date_naissance`) VALUES (?nom,?prenom,?adresse,?telephone,?email,?date)";
+                    cmd.Parameters.Add("?nom", MySqlDbType.String).Value = nom;
+                    cmd.Parameters.Add("?prenom", MySqlDbType.String).Value = prenom;
+                    cmd.Parameters.Add("?adresse", MySqlDbType.String).Value = adresse;
+                    cmd.Parameters.Add("?telephone", MySqlDbType.String).Value = telephone;
+                    cmd.Parameters.Add("?email", MySqlDbType.String).Value = email;
+                    cmd.Parameters.Add("?date", MySqlDbType.Date).Value = date;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            this.CloseConnection();
+        }
+
+        public decimal TotalCommandeVente(List<Article> listArticle)
         {
             decimal totalCommande = 0;
             foreach (Article article in listArticle)
@@ -345,6 +393,12 @@ namespace Data
                 totalCommande += article.QuantiteCommande * (article.Prix_achat + article.Marge_benef);
             }
             return totalCommande;
+        }
+        public decimal TotalCommandeAchat(decimal prixHT, int QteStock)
+        {
+            decimal totalCommandeAchat = 0;
+            totalCommandeAchat += prixHT * QteStock;
+            return totalCommandeAchat;
         }
 
         public void InsertCommandeVente(List<Article> listArticle)
@@ -356,7 +410,7 @@ namespace Data
                 using (MySqlCommand cmd = connection.CreateCommand())
                 {
                     cmd.CommandText = "INSERT INTO `commandesventes`(`Caisse_idCaisse`, `Clients_idClients`, `date_achat`, `TotalCommande`) VALUES (1, 1, NOW(), ?TotalCommande)";
-                    cmd.Parameters.Add("?TotalCommande", MySqlDbType.Decimal).Value = TotalCommande(listArticle);
+                    cmd.Parameters.Add("?TotalCommande", MySqlDbType.Decimal).Value = TotalCommandeVente(listArticle);
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                     InsertLigneCommandeVente(listArticle, idCommande);
@@ -378,7 +432,7 @@ namespace Data
                         cmd.Parameters.Add("?nomArticle", MySqlDbType.String).Value = article.Reference;
                         cmd.Parameters.Add("?idCaisse", MySqlDbType.Int32).Value = 1;
                         cmd.Parameters.Add("?qte", MySqlDbType.Int32).Value = article.QuantiteCommande;
-                        cmd.Parameters.Add("?TotalCommande", MySqlDbType.Decimal).Value = TotalCommande(listArticle);
+                        cmd.Parameters.Add("?TotalCommande", MySqlDbType.Decimal).Value = TotalCommandeVente(listArticle);
                         cmd.ExecuteNonQuery();
                     }
                 }

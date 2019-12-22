@@ -29,41 +29,41 @@ namespace entrepot_pharmacie
 
         public static void ListMenu(List<Article> ListePanier)
         {
+            Console.Clear();
             Data.Database database = new Data.Database();
             int result = 0;
             bool exit = false;
             Console.WriteLine("Solde de la Caisse : " + Caisse.soldeCaisse + " euros\n");
             Console.WriteLine("Contenu du panier :\n");
             printInventory(ListePanier);
-            Console.WriteLine("1 - Vendre des articles\n2 - Gérer les articles\n3 - Gérer les clients\n4 - Gérer les fournisseurs et entrepôts\n");
+            Console.WriteLine("1 - Vendre des articles\n2 - Gérer les articles\n3 - Gérer les clients\n4 - Gérer les fournisseurs et entrepôts\n5 - Gérer la Caisse\n");
             string choice = Console.ReadLine();
             result = Utilitaire.TestValeur(choice, true).Item1;
             while (!exit)
             {
                 switch (result)
                 {
-                    case 1:
+                    case 1: // Vendre des articles
                         AchatArticle(ListePanier, database);
-
                         break;
-                    case 2:
-                        GererArticles(database);
+                    case 2: // Gérer les articles dans le stock
+                        GererArticles(ListePanier, database);
                         break;
-                    case 3:
+                    case 3: // Gérer les clients
+                        GererLesClients(ListePanier, database);
+                        break;
+                    case 4: // Gérer les fournisseurs et entrepôts
                         Console.Clear();
                         break;
-                    case 4:
-                        Console.Clear();
+                    case 5: // Gérer la caisse
+                        SetSoldeCaisse();
+                        ListMenu(ListePanier);
                         break;
-
                     default:
-
                         break;
                 }
             }
         }
-
-
         public static void AchatArticle(List<Article> ListePanier, Database db)
         {
             Data.Database database = new Data.Database();
@@ -92,8 +92,8 @@ namespace entrepot_pharmacie
                         {
                         db.InsertCommandeVente(ListePanier);
                         db.MouvementStockVente(ListePanier);
-                        decimal TotalCommande = db.TotalCommande(ListePanier);
-                        caisse.AjouterArgent(TotalCommande, idCaisse);
+                        decimal TotalCommande = db.TotalCommandeVente(ListePanier);
+                        Caisse.AjouterArgent(TotalCommande, idCaisse);
                         ListePanier.Clear();
                         Console.WriteLine("Commande passé merci");
                         Console.ReadLine();
@@ -101,11 +101,24 @@ namespace entrepot_pharmacie
                     }
                     else if (choix == 2) // Retirer un article du panier
                     {
-                                
+                        Console.Clear();
+                        Console.WriteLine("Entrer la référence de l'article à supprimer\n");
+                        string inputReference = Console.ReadLine();
+                        if(Utilitaire.RefArticleExisteDansList(ListePanier, inputReference))
+                        {
+                            Article article = Utilitaire.ArticleExiste(ListePanier, inputReference);
+                            ListePanier.Remove(article);
+                            Console.WriteLine("Produit retiré du Panier\n");
+                            Console.ReadLine();
+                        } else
+                        {
+                            Console.WriteLine("Ce Produit ne se trouve pas dans le Panier\n");
+                            Console.ReadLine();
+                        }
                     }
                     else if (choix == 3) // Vider le panier
                     {
-                    ListePanier.Clear();
+                        ListePanier.Clear();
                     }
                     else if (choix == 0) // Retour menu principal
                     {
@@ -141,37 +154,38 @@ namespace entrepot_pharmacie
                     Console.Clear();
                     ListMenu(ListePanier);
                     break;
-
                 default:
                     break;
             }
         }
-        private static bool AfficherLesArticles()
+        
+        private static void GererLesClients(List<Article> ListePanier, Database db)
         {
-            int a = 0;
-            switch (a)
-            {
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                default:
-                    break;
-            }
-            return true;
-        }
-        private static bool GererLesClients()
-        {
-            Console.WriteLine("1 - Ajouter un client\n2 - Modifier un client\n3 - Supprimer un client\n");
+            Console.Clear();
+            Data.Database database = new Data.Database();
+            Console.WriteLine("1 - Ajouter un client\n2 - Modifier un client\n3 - Supprimer un client\n0 - Retour");
             string choice = Console.ReadLine();
             int result = Utilitaire.TestValeur(choice, true).Item1;
 
             switch (result)
             {
                 case 1: // Ajouter un client
+                    Console.Clear();
+                    Console.WriteLine("Nom du client\n");
+                    string nom = Console.ReadLine();
+                    Console.WriteLine("Prenom du client\n");
+                    string prenom = Console.ReadLine();
+                    Console.WriteLine("Adresse du client\n");
+                    string adresse = Console.ReadLine();
+                    Console.WriteLine("Numéro de téléphone du client\n");
+                    string numero = Console.ReadLine();
+                    Console.WriteLine("Adresse Email du client\n");
+                    string email = Console.ReadLine();
+                    Console.WriteLine("Date de naissance du client\n");
+                    string birthdate = Console.ReadLine();
+                    DateTime bdate = Convert.ToDateTime(birthdate); // Ajouter un check de la date
 
+                    db.InsertClient(nom, prenom, adresse, numero, email, bdate.Date);
                     break;
                 case 2: // Modifier un client
 
@@ -179,11 +193,13 @@ namespace entrepot_pharmacie
                 case 3: // Supprimer un client
 
                     break;
+                case 0: // Retour
+                    ListMenu(ListePanier);
+                    break;
                 default:
 
                     break;
             }
-            return true;
         }
         private static bool GererLesFournisseurEtEntrepots()
         {
@@ -217,7 +233,6 @@ namespace entrepot_pharmacie
             }
             return true;
         }
-
 
         private static void printInventory(List<Article> listArticle)
         {
@@ -258,7 +273,7 @@ namespace entrepot_pharmacie
                     }
                     else
                     {
-                        Console.WriteLine("Quantité non disponible, veuillez saisir une autre quantité :");
+                        Console.WriteLine("Quantité non disponible, veuillez saisir une quantité inferieure à : " + article.QuantiteStock);
                     }
                 } while (database.QuantiteStockDispo(article, QteAjout) == false);
             }
@@ -331,32 +346,89 @@ namespace entrepot_pharmacie
             article = new Article(name, reference, description, prixHT, marge, code, quantiteDispo, qteCommande);
 
             database.CreerArticle(article, idEntrepot);
+            decimal TotalCommande = database.TotalCommandeAchat(prixHT, quantiteDispo);
+            Caisse.RetirerArgent(TotalCommande, idCaisse);
         }
 
-
-        private static void GererArticles(Database database)
+        private static void GererArticles(List<Article> ListePanier, Database database)
         {
             Console.Clear();
-            Console.WriteLine("1 - Ajouter un article\n2 - Modifier un article\n3 - Supprimer un article\n");
+            Console.WriteLine("Solde de la Caisse : " + Caisse.soldeCaisse + " euros\n");
+            Console.WriteLine("1 - Ajouter un article\n2 - Modifier un article\n3 - Supprimer un article\n4 - Afficher tout les articles du stock\n0 - Retour");
             string gererArticle = Console.ReadLine();
             int GererArticle = Utilitaire.TestValeur(gererArticle, true).Item1;
-            if (GererArticle == 1)
+            if (GererArticle == 1) // Ajouter un article dans le stock
             {
                 AjouterArticleStock(database);
-            } 
-            else if(GererArticle == 2)
-            {
-
             }
-            else if (GererArticle == 3)
+            else if (GererArticle == 2) // Modifier un article dans le stock
             {
-                // Supprimer un produit à l'aide de sa référence produit
+                Console.Clear();
+                Console.WriteLine("Entrer la référence du produit : ");
+                string reference = Console.ReadLine();
+                Console.WriteLine("Nouveau nom du produit : ");
+                string nom = Console.ReadLine();
+
+                Console.WriteLine("Nouvelle description du produit : ");
+                string description = Console.ReadLine();
+
+                Console.WriteLine("Nouvelle marge du produit : ");
+                string marge = Console.ReadLine();
+                decimal Marge = Utilitaire.TestValeur(marge, false).Item2;
+                database.UpdateArticle(reference, nom, description, Marge);
+            }
+            else if (GererArticle == 3) // Supprimer un produit à l'aide de sa référence produit
+            {
                 Console.Clear();
                 Console.WriteLine("Entrer la reference exacte du produit à supprimer :\n");
                 String refProduit = Console.ReadLine();
                 database.DeleteArticle(refProduit);
+                Console.WriteLine("Article supprimé\n");
+                Console.ReadLine();
             }
-            GererArticles(database);
+            else if (GererArticle == 4) // Afficher tout les articles du stock
+            {
+                database.Select();
+            }
+            else if (GererArticle == 0) // Retour menu
+            {
+                ListMenu(ListePanier);
+            }
+            GererArticles(ListePanier, database);
+        }
+
+        private static void SetSoldeCaisse()
+        {
+            Console.Clear();
+            Console.WriteLine("Solde de la Caisse : " + Caisse.soldeCaisse + " euros\n");
+            Console.WriteLine("1 - Ajouter de l'argent dans la caisse\n2 - Retirer de l'argent de la caisse\n0 - Retour");
+            string gererCaisse = Console.ReadLine();
+            int GererCaisse = Utilitaire.TestValeur(gererCaisse, true).Item1;
+            if (GererCaisse == 1)
+            {
+                Console.Clear();
+                Console.WriteLine("Solde de la Caisse : " + Caisse.soldeCaisse + " euros\n");
+                Console.WriteLine("Entrer le montant à ajouter dans la caisse : \n");
+                string setSolde = Console.ReadLine();
+                decimal SetSolde = Utilitaire.TestValeur(setSolde, false).Item2;
+                Caisse.AjouterArgent(SetSolde, idCaisse);
+            }
+            else if (GererCaisse == 2)
+            {
+                Console.Clear();
+                Console.WriteLine("Solde de la Caisse : " + Caisse.soldeCaisse + " euros\n");
+                Console.WriteLine("Entrer le montant à retirer de la caisse : \n");
+                string setSolde = Console.ReadLine();
+                decimal SetSolde = Utilitaire.TestValeur(setSolde, false).Item2;
+                Caisse.RetirerArgent(SetSolde, idCaisse);
+            }
+            else if (GererCaisse == 0)
+            {
+
+            }
+
+
+            
         }
 
     }
@@ -371,10 +443,6 @@ namespace entrepot_pharmacie
  * Modifier Fournisseur
  * Supprimer Fournisseur
  * 
- * Modifier Article
- * Acheter Article
- * 
- * Ajouter Client
  * Modifier Client
  * Supprimer Client
  * 

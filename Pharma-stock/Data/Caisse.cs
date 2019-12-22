@@ -24,16 +24,18 @@ namespace entrepot_pharmacie
             soldeCaisse = Solde;
         }
 
-        public void AjouterArgent(decimal Solde, int idCaisse)
+        public static void AjouterArgent(decimal Solde, int idCaisse)
         {
             Data.Database database = new Data.Database();
             soldeCaisse = soldeCaisse + Solde;
             database.UpdateCaisse(soldeCaisse, idCaisse);
         }
 
-        public static void RetirerArgent(int a)
+        public static void RetirerArgent(decimal Solde, int idCaisse)
         {
-            soldeCaisse = soldeCaisse - a;
+            Data.Database database = new Data.Database();
+            soldeCaisse = soldeCaisse - Solde;
+            database.UpdateCaisse(soldeCaisse, idCaisse);
         }
     }
 }
