@@ -68,6 +68,7 @@
             // 
             // soldeLabel
             // 
+            this.soldeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.soldeLabel.AutoSize = true;
             this.soldeLabel.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold);
             this.soldeLabel.ForeColor = System.Drawing.Color.Black;
@@ -160,6 +161,7 @@
             this.btnVentes.Tag = "";
             this.btnVentes.Text = "Ventes";
             this.btnVentes.UseVisualStyleBackColor = false;
+            this.btnVentes.Click += new System.EventHandler(this.btnVentes_Click);
             // 
             // btnProduits
             // 
@@ -269,7 +271,7 @@
             // 
             // panelContent
             // 
-            this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panelContent.Location = new System.Drawing.Point(180, 40);
             this.panelContent.Name = "panelContent";
             this.panelContent.Size = new System.Drawing.Size(704, 421);

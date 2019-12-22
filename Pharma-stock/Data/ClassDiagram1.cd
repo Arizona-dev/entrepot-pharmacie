@@ -1,19 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="entrepot_pharmacie.Article">
-    <Position X="5.75" Y="1.5" Width="1.5" />
+    <Position X="6.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAgAAAIAAEIEIAAAAAAACABAAQAAAQAQA=</HashCode>
+      <HashCode>AACCAACAgAAggAQAIAAEIEIAACBCAAAAAIAAAAAAAAA=</HashCode>
       <FileName>Article.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Fournisseur" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="entrepot_pharmacie.Caisse">
     <Position X="1.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAAAAIEAAAAAAAACAQAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAACACAgAAAAIAAAAAAAAACAAAAAgAgAAAAAAA=</HashCode>
       <FileName>Caisse.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -25,9 +22,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="entrepot_pharmacie.Entrepot">
-    <Position X="5.5" Y="5.25" Width="1.5" />
+    <Position X="4" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAQAAIIIABAAAAAAAAAAAAABAAAAAAAAA0AAA=</HashCode>
+      <HashCode>AAAEAAAAUAAIIJABAAAAAAAAAAAAABAAAAAAAAA0AAA=</HashCode>
       <FileName>Entrepot.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

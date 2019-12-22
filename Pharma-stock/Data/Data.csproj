@@ -83,11 +83,10 @@
   <ItemGroup>
     <Compile Include="Article.cs" />
     <Compile Include="Caisse.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Commande.cs" />
     <Compile Include="Database.cs" />
-    <Compile Include="Document.cs" />
+    <Compile Include="OpenXmlDocument.cs" />
     <Compile Include="Entrepot.cs" />
     <Compile Include="Fournisseur.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

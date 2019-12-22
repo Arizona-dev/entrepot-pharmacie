@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Data;
 
 namespace EntrepotGUI
 {
@@ -104,6 +105,12 @@ namespace EntrepotGUI
         private void SoldeRefresh_Tick(object sender, EventArgs e)
         {
             UpdateCaisse();
+        }
+
+        private void btnVentes_Click(object sender, EventArgs e)
+        {
+            OpenXmlDocument xml = new OpenXmlDocument();
+            xml.CreerFacture();
         }
     }
 }

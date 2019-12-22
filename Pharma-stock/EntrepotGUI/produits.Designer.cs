@@ -63,6 +63,7 @@
             // 
             // btnDeleteProduct
             // 
+            this.btnDeleteProduct.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDeleteProduct.BackColor = System.Drawing.Color.Transparent;
             this.btnDeleteProduct.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnDeleteProduct.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -86,6 +87,7 @@
             // 
             // btnAddProduct
             // 
+            this.btnAddProduct.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddProduct.BackColor = System.Drawing.Color.Transparent;
             this.btnAddProduct.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnAddProduct.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -111,6 +113,7 @@
             // 
             this.listeProduits.AllowUserToAddRows = false;
             this.listeProduits.AllowUserToDeleteRows = false;
+            this.listeProduits.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.listeProduits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.listeProduits.Location = new System.Drawing.Point(10, 52);
             this.listeProduits.MultiSelect = false;
@@ -122,6 +125,7 @@
             // 
             // btnEditProduit
             // 
+            this.btnEditProduit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEditProduit.BackColor = System.Drawing.Color.Transparent;
             this.btnEditProduit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnEditProduit.Cursor = System.Windows.Forms.Cursors.Hand;

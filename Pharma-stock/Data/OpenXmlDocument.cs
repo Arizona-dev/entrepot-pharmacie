@@ -9,29 +9,27 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    class Document
+    public class OpenXmlDocument
     {
-        private Body body;
 
-        public Document()
+        public OpenXmlDocument()
         {
         }
 
         public void CreerFacture()
         {
-            using (WordprocessingDocument doc = WordprocessingDocument.Create("C:\\test11.docx", DocumentFormat.OpenXml.WordprocessingDocumentType.Document))
+            using (WordprocessingDocument doc = WordprocessingDocument.Create("C:\\test\\test11.docx", DocumentFormat.OpenXml.WordprocessingDocumentType.Document))
             {
-                // Add a main document part.
                 MainDocumentPart mainPart = doc.AddMainDocumentPart();
 
-                // Create the document structure and add some text.
+                // Crée la structure du document
                 mainPart.Document = new Document();
                 Body body = mainPart.Document.AppendChild(new Body());
                 Paragraph para = body.AppendChild(new Paragraph());
                 Run run = para.AppendChild(new Run());
 
-                // String msg contains the text, "Hello, Word!"
-                run.AppendChild(new Text("New text in document"));
+                // le contenu du document
+                run.AppendChild(new Text("Nouveau document Word"));
             }
         }
 
