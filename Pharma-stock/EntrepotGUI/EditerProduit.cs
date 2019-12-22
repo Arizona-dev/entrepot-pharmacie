@@ -18,9 +18,11 @@ namespace EntrepotGUI
         private extern static void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hwnd, int wmsg, int wparam, int lparam);
-        public EditerProduit()
+        private produits _produit;
+        public EditerProduit(produits produit)
         {
             InitializeComponent();
+            _produit = produit;
         }
 
         private void btnAnnulerAjout_Click(object sender, EventArgs e)
@@ -40,9 +42,9 @@ namespace EntrepotGUI
                 return;
             }
 
-            if (database.SelectReferenceExist(reference))
+            if (!database.SelectReferenceExist(reference))
             {
-                string text = "Un produit existe déja sous cette référence, Utilisez une autre référence.";
+                string text = "Aucun produit n'existe sous cette référence, Utilisez une autre référence.";
                 MessageBox.Show(text);
                 return;
             }
@@ -99,6 +101,7 @@ namespace EntrepotGUI
 
             database.UpdateListProduit(reference, nom, description, prixHT, marge);
             string end = "Article edité avec succès";
+            _produit.ReloadGrid();
             MessageBox.Show(end);
             this.Close();
         }

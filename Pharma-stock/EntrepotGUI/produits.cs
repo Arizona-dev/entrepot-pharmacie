@@ -20,7 +20,7 @@ namespace EntrepotGUI
             ReloadGrid();
         }
 
-        public static void ReloadGrid()
+        public void ReloadGrid()
         {
             Database database = new Database();
             listeProduits.DataSource = database.SelectProduit();
@@ -30,7 +30,7 @@ namespace EntrepotGUI
         {
             if (Application.OpenForms.OfType<EditerProduit>().Count() == 1)
                 Application.OpenForms.OfType<EditerProduit>().First().Close();
-            EditerProduit EditerProduitframe = new EditerProduit();
+            EditerProduit EditerProduitframe = new EditerProduit(this);
             EditerProduitframe.Show();
         }
 
@@ -38,7 +38,7 @@ namespace EntrepotGUI
         {
             if (Application.OpenForms.OfType<AjouterProduit>().Count() == 1)
                 Application.OpenForms.OfType<AjouterProduit>().First().Close();
-            AjouterProduit AjouterProduitFrame = new AjouterProduit();
+            AjouterProduit AjouterProduitFrame = new AjouterProduit(this);
             AjouterProduitFrame.Show();
         }
 
@@ -47,22 +47,19 @@ namespace EntrepotGUI
             Database database = new Database();
             if (MessageBox.Show("Voulez vous vraiment supprimer cet article ?","SUPPRESSION D'UN ARTICLE", MessageBoxButtons.OKCancel,MessageBoxIcon.Warning)==DialogResult.OK)
             {
-                //string selectedRow = listeProduits.Rows[0].Cells[0].Value.ToString();
-                //MessageBox.Show(selectedRow);
-                
+                int index = 0;
                 foreach (DataGridViewRow row in listeProduits.Rows)
                 {
                     if (row.Selected == true)
                     {
-                        int index = row.Index;
-                        MessageBox.Show(Convert.ToString(index));
+                        index = row.Index;
                     }
                 }
-
-                string reference = "";
-                MessageBox.Show(reference);
-                //database.DeleteArticle(reference);
+                string reference = listeProduits.Rows[index].Cells[0].Value.ToString();
+                database.DeleteArticle(Convert.ToString(reference));
                 listeProduits.DataSource = database.SelectProduit();
+                MessageBox.Show("Article supprimé avec succès");
+                
             }
 
             

@@ -20,7 +20,8 @@ namespace EntrepotGUI
         private extern static void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hwnd, int wmsg, int wparam, int lparam);
-        
+        private produits _produit;
+
         public int idCaisse
         {
             get { return Caisse.IdCaisse; }
@@ -32,10 +33,10 @@ namespace EntrepotGUI
             set { Entrepot.IdEntrepot = value; }
         }
 
-        public AjouterProduit()
+        public AjouterProduit(produits produit)
         {
             InitializeComponent();
-            
+            _produit = produit;
         }
 
         private void btnAddProduct_Click(object sender, EventArgs e)
@@ -134,9 +135,7 @@ namespace EntrepotGUI
             database.CreerArticle(article, idEntrepot);
             decimal TotalCommande = database.TotalCommandeAchat(prixHT, quantiteDispo);
             Caisse.RetirerArgent(TotalCommande, idCaisse);
-
-            produits.ReloadGrid();
-
+            _produit.ReloadGrid();
             string end = "Article ajouté avec succès";
             MessageBox.Show(end);
             this.Close();
